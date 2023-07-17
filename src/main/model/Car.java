@@ -1,11 +1,12 @@
 package model;
 
+// Represents the car that can crush the chicken
 public class Car {
     private int speed;
     private Position position;
 
     // EFFECTS: constructs a car object with speed, position and dir
-    // REQUIRES: dir to be -1 or 1
+    // REQUIRES: dir must be -1 or 1, speed > 0
     public Car(int spd, Position position, int dir) {
         this.speed = spd * dir;
         this.position = position;
@@ -32,4 +33,5 @@ public class Car {
     public int getSpeed() {
         return this.speed;
     }
+
 }

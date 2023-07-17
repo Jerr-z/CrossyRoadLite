@@ -20,16 +20,6 @@ public class Chicken {
         position.updatePosition(dx, dy);
     }
 
-    // EFFECTS: detects collision with other game objects
-    // REQUIRES: position to be in game bound
-    public boolean collidedWith(Position pos) {
-        // not super useful atm...
-        return (this.position.getX() == pos.getX())
-                && (this.position.getY() == pos.getY());
-    }
-
-
-
     public Position getPosition() {
         return position;
     }

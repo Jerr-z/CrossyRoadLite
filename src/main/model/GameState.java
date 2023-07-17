@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-// overall state of the game
+// overall state of the game, contains almost all info that goes on
 public class GameState {
 
     public static final int CAMERA_SPD = 1;
@@ -52,7 +52,7 @@ public class GameState {
     }
 
     // MODIFIES: this
-    // EFFECTS: randomly generates a level for the player
+    // EFFECTS: randomly generates a map for the player
     public void initializeLevel() {
         // creates random environment for rows - 3 rows
         for (int i = 0; i < canvasSize - 3; i++) {
@@ -70,7 +70,7 @@ public class GameState {
     public void placeChicken() {
         // places the chicken in the 3rd last row, in the middle
         int midpoint = canvasSize / 2;
-        System.out.println(midpoint);
+        //System.out.println(midpoint);
         chicken = new Chicken(new Position(midpoint, canvasSize - 4));
     }
 
@@ -252,7 +252,14 @@ public class GameState {
     // MODIFIES: this
     // EFFECTS: deletes cars that are out of left right bound
     public void removeCarsOutOfBounds() {
-        // TODO
+        Iterator<Car> carIterator = listOfCars.iterator();
+        while (carIterator.hasNext()) {
+            Car car = carIterator.next();
+            Position carPos = car.getPosition();
+            if (!carPos.withinBoundary(canvasSize, canvasSize)) {
+                carIterator.remove();
+            }
+        }
     }
 
     // MODIFIES: this
@@ -288,10 +295,13 @@ public class GameState {
     // EFFECTS: returns the possible positions for a chicken to go to
     public HashSet<Position> nextValidPosForChicken() {
         HashSet<Position> nextPos = new HashSet<>();
-        //Position stepRight = new Position(chicken.getPosition().getX() + CHICKEN_SPD, chicken.getPosition().getY());
-        //Position stepLeft = new Position(chicken.getPosition().getX() - CHICKEN_SPD, chicken.getPosition().getY());
-        //Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + CHICKEN_SPD);
-        //Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - CHICKEN_SPD);
+        // TODO
+        // correct implementation isn't working for some wack reason
+
+        /*Position stepRight = new Position(chicken.getPosition().getX() + CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepLeft = new Position(chicken.getPosition().getX() - CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + CHICKEN_SPD);
+        Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - CHICKEN_SPD);*/
         Position stepRight = new Position(chicken.getPosition().getX() + 1, chicken.getPosition().getY());
         Position stepLeft = new Position(chicken.getPosition().getX() - 1, chicken.getPosition().getY());
         Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + 1);
@@ -318,8 +328,8 @@ public class GameState {
 
     // MODIFIES: this
     // EFFECTS: updates the score
-    public void updateScore(int delta) {
-        score += delta;
+    public void updateScore(int amount) {
+        score += amount;
     }
 
     public int getScore() {
@@ -347,7 +357,11 @@ public class GameState {
     }
 
     public String getInput() {
-        return this.input;
+        return input;
+    }
+
+    public int getCanvasSize() {
+        return canvasSize;
     }
 
 }

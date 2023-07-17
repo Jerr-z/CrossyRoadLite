@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import static model.GameState.CAR_SPD_HI;
 import static model.GameState.CAR_SPD_LW;
 
-/* Roads have only  */
+// Represents a road on the map which can spawn cars, only has y coord
 public class Road {
     private int direction; // 1: R -1: L
     private int carSpeed;

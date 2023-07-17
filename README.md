@@ -12,10 +12,12 @@ application, an addictive and visually appealing game all started from
 the joke "Can the chicken cross the road?".
 <br>
 
+- As a user, I want to be able to add a chicken to my map
 - As a user, I want to be able to control the chicken in 4 directions
-- As a user, I want to be able to see who has the highest score when I am in game
+- As a user, I want to be able to increment my score as I progress in game
 - As a user, I want to experience the thrill by avoiding multiple cars on the road
-- As a user, I want to see a somewhat randomly generated map so it's refreshing to play everytime.
+- As a user, I want to see a randomly generated map, so it's a new experience everytime.
+- As a user, I want an endless gaming experience until I die in game.
 
 ### What will the Application do?
 <br>

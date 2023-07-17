@@ -2,6 +2,7 @@ package model;
 
 import java.util.*;
 
+// represents a position in 2d space
 public class Position {
     private int xpos;
     private int ypos;
