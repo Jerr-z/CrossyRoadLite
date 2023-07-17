@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 public class GameState {
 
     public static final int CAMERA_SPD = 1;
-    public static final int CHICKEN_SPD = 2;
+    public static final int CHICKEN_SPD = 1;
     public static final int CAR_SPD_LW = 1;
     public static final int CAR_SPD_HI = 2;
     public static final int CAR_GEN_PROB = 8; // 1 out of cargenprob
@@ -39,11 +39,14 @@ public class GameState {
 
     // MODIFIES: this
     // EFFECTS: updates various states of the game, main tick function
-    // REQUIRES: input must be one of "up", "down", "left" or "right"
+    // REQUIRES: input must be one of "up", "down", "left", "right" or "none"
     public void tick(String input) {
         this.input = input; // updates user input
         updateGameCamera(); // shifts everything from cam perspective
-        removeBottomTerrain(); // removes terrain that's phased out from memory
+        removeBottomCars();
+        removeBottomGrass();
+        removeBottomRoad();
+        removeBottomTrees(); // removes terrain that's phased out from memory
         generateTerrain(0); // generating another layer of terrain
         generateCars(); // roads proc car generation
         updateCars();// start moving car
@@ -60,7 +63,7 @@ public class GameState {
         }
 
         // for the last 3 rows create just grass
-        for (int i = canvasSize - 1; i < canvasSize + 2; i++) {
+        for (int i = canvasSize - 3; i < canvasSize; i++) {
             generateGrass(canvasSize, i, false);
         }
     }
@@ -106,7 +109,7 @@ public class GameState {
 
     // MODIFIES: this
     // EFFECTS: adds a road object to listOfRoads with road at level y.
-    // REQUIRES: 0 <= y <= canvasSize
+    // REQUIRES: 0 <= y < canvasSize
     public void generateRoad(int y) {
         Road road = new Road(y);
         if (!listOfRoads.contains(road)) {
@@ -116,7 +119,7 @@ public class GameState {
 
     // MODIFIES: this
     // EFFECTS: Generates a tree block on grass
-    // REQUIRES: 0 <= x,y <= canvasSize
+    // REQUIRES: 0 <= both x and y < canvasSize
     public void generateTree(int x, int y) {
         listOfTrees.add(new Position(x,y));
     }
@@ -141,7 +144,7 @@ public class GameState {
         int chickenY = chicken.getPosition().getY();
 
         // if on the bottom of screen
-        if (chickenY == canvasSize - 1) {
+        if (chickenY >= canvasSize - 1) {
             return true;
         }
         while (carIterator.hasNext()) {
@@ -149,10 +152,10 @@ public class GameState {
             int carX = car.getPosition().getX();
             int carY = car.getPosition().getY();
             int carSpd = car.getSpeed();
-            List<Integer> carHitBox = IntStream.rangeClosed(carX - carSpd, carX)
-                    .boxed().collect(Collectors.toList());
+            //List<Integer> carHitBox = IntStream.rangeClosed(carX - carSpd, carX)
+                    //.boxed().collect(Collectors.toList());
             // if car passed thru chicken after tick
-            if (chickenY == carY && carHitBox.contains(chickenX)) {
+            if (chickenY == carY && chickenX == carX) {
                 return true;
             }
         }
@@ -162,7 +165,10 @@ public class GameState {
     // MODIFIES: this
     // EFFECTS: shifts every game object's position down and removes objects out of view
     public void updateGameCamera() {
-        removeBottomTerrain();
+        removeBottomTrees();
+        removeBottomRoad();
+        removeBottomGrass();
+        removeBottomCars();
         chicken.updatePos(0, CAMERA_SPD);
         moveRoadDown();
         moveGrassDown();
@@ -262,35 +268,58 @@ public class GameState {
         }
     }
 
-    // MODIFIES: this
-    // EFFECTS: removes the terrain that's out of bottom bound
-    public void removeBottomTerrain() {
-        Iterator<Road> roadIterator = listOfRoads.iterator();
-        Iterator<Position> treeIterator = listOfTrees.iterator();
-        Iterator<Car> carIterator = listOfCars.iterator();
 
-        while (roadIterator.hasNext()) {
-            Road road = roadIterator.next();
-            if (road.getPosition() == canvasSize - 1) {
-                roadIterator.remove();
+    // EFFECTS: removes the most bottom layer of grass if its about to be phased out
+    // of view
+    // MODIFIES: this
+    public void removeBottomGrass() {
+        Iterator<Position> grassIterator = listOfGrass.iterator();
+        while (grassIterator.hasNext()) {
+            Position grass = grassIterator.next();
+            if (grass.getY() == canvasSize - 1) {
+                grassIterator.remove();
             }
         }
+    }
 
+    // EFFECTS: removes the most bottom layer of trees if its about to be phased out
+    // of view
+    // MODIFIES: this
+    public void removeBottomTrees() {
+        Iterator<Position> treeIterator = listOfTrees.iterator();
         while (treeIterator.hasNext()) {
             Position tree = treeIterator.next();
             if (tree.getY() == canvasSize - 1) {
                 treeIterator.remove();
             }
         }
+    }
 
+    // EFFECTS: removes the most bottom layer of cars if its about to be phased out
+    // of view
+    // MODIFIES: this
+    public void removeBottomCars() {
+        Iterator<Car> carIterator = listOfCars.iterator();
         while (carIterator.hasNext()) {
             Car car = carIterator.next();
             if (car.getPosition().getY() == canvasSize - 1) {
                 carIterator.remove();
             }
         }
-
     }
+
+    // EFFECTS: removes bottom layer of roads if its about to be phased out
+    // MODIFIES: this
+    public void removeBottomRoad() {
+        Iterator<Road> roadIterator = listOfRoads.iterator();
+        while (roadIterator.hasNext()) {
+            Road road = roadIterator.next();
+            if (road.getPosition() == canvasSize - 1) {
+                roadIterator.remove();
+            }
+        }
+    }
+
 
     // EFFECTS: returns the possible positions for a chicken to go to
     public HashSet<Position> nextValidPosForChicken() {
