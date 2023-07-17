@@ -20,23 +20,27 @@ import model.*;
 
 public class Terminal {
     public static final int FPS = 1;
-    public static final int CANVAS_SIZE = 15;
+    public static final int CANVAS_SIZE = 20;
     private GameState game;
     private Screen screen;
     private WindowBasedTextGUI endGui;
 
     // THANK YOU TO MAZENK's SNAKE GAME FOR REFERENCE
 
+    // MODIFIES: this
+    // EFFECTS: begins the game by starting up a screen
     public void start() throws IOException, InterruptedException {
         screen = new DefaultTerminalFactory().createScreen();
         screen.startScreen();
 
         TerminalSize terminalSize = screen.getTerminalSize();
 
-        game = new GameState(15);
+        game = new GameState(CANVAS_SIZE);
         startTick();
     }
 
+    // MODIFIES: this
+    // EFFECTS: starts the "ticking" mechanic
     public void startTick() throws IOException, InterruptedException {
         while (!game.isChickenDead() || endGui.getActiveWindow() != null) {
             tick();
@@ -45,6 +49,8 @@ public class Terminal {
         System.exit(0);
     }
 
+    // MODIFIES: this
+    // EFFECTS: processes everything that happens within a single frame
     private void tick() throws IOException {
         game.tick(userInput());
         screen.setCursorPosition(new TerminalPosition(0,0));
@@ -53,7 +59,7 @@ public class Terminal {
         screen.setCursorPosition(new TerminalPosition(screen.getTerminalSize().getColumns() - 1, 0));
     }
 
-
+    // EFFECTS: returns a user input
     private String userInput() throws IOException {
         KeyStroke stroke = screen.pollInput();
         if (stroke == null) {
@@ -76,6 +82,8 @@ public class Terminal {
 
     }
 
+    // MODIFIES: this
+    // EFFECTS: main render method for a single frame
     private void render() {
         if (game.isChickenDead()) {
             if (endGui == null) {
@@ -91,17 +99,21 @@ public class Terminal {
         drawScore();
     }
 
+    // MODIFIES: this
+    // EFFECTS: render a window after the game ends
     private void renderEndScreen() {
         endGui = new MultiWindowTextGUI(screen);
 
         new MessageDialogBuilder()
                 .setTitle("Game Over")
-                .setText("You finished with a score of" + game.getScore())
+                .setText("You finished with a score of " + game.getScore())
                 .addButton(MessageDialogButton.Close)
                 .build()
                 .showDialog(endGui);
     }
 
+    // MODIFIES: screen
+    // EFFECTS: renders the score on screen
     private void drawScore() {
         TextGraphics text = screen.newTextGraphics();;
         text.setForegroundColor(TextColor.ANSI.WHITE);
@@ -112,11 +124,15 @@ public class Terminal {
         text.putString(15, 0, Integer.toString(game.getScore()));
     }
 
+    // MODIFIES: screen
+    // EFFECTS: draws chicken on screen
     private void drawChicken() {
         Chicken chicken = game.getChicken();
         drawAt(chicken.getPosition(), TextColor.ANSI.BLUE, '█');
     }
 
+    // MODIFIES: screen
+    // EFFECTS: draws grass on screen
     private void drawGrass() {
         HashSet<Position> listOfGrass = game.getListOfGrass();
         Iterator<Position> grassIterator = listOfGrass.iterator();
@@ -126,15 +142,19 @@ public class Terminal {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: draws tree on screen
     private void drawTrees() {
         HashSet<Position> listOfTrees = game.getListOfTrees();
         Iterator<Position> treeIterator = listOfTrees.iterator();
         while (treeIterator.hasNext()) {
             Position tree = treeIterator.next();
-            drawAt(tree, new TextColor.RGB(0,200,0), '█');
+            drawAt(tree, TextColor.ANSI.CYAN, '█');
         }
     }
 
+    // MODIFIES: screen
+    // EFFECTS: draw cars on screen
     private void drawCars() {
         HashSet<Car> listOfCars = game.getListOfCars();
         Iterator<Car> carIterator = listOfCars.iterator();
@@ -145,6 +165,8 @@ public class Terminal {
         }
     }
 
+    // MODIFIES: screen
+    // EFFECTS: draw roads on screen
     private void drawRoads() {
         HashSet<Road> listOfRoad = game.getListOfRoads();
         Iterator<Road> roadIterator = listOfRoad.iterator();
@@ -157,6 +179,8 @@ public class Terminal {
         }
     }
 
+    // MODIFIES: screen
+    // EFFECTS: main drawing function that draws a character at a position on screen
     private void drawAt(Position pos, TextColor color, char c) {
         TextGraphics text = screen.newTextGraphics();
         text.setForegroundColor(color);

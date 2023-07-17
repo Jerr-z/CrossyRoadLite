@@ -6,8 +6,7 @@ public class Position {
     private int xpos;
     private int ypos;
 
-    // EFFECTS: creates a Position object that
-    // represents a position in game
+    // EFFECTS: creates object that represents a position in game
     // REQUIRES: x, y >=0
     public Position(int x, int y) {
         this.xpos = x;
@@ -45,6 +44,7 @@ public class Position {
         this.ypos += dy;
     }
 
+    // EFFECTS: checks if current position is within the specified boundary
     public boolean withinBoundary(int x, int y) {
         // inclusive
         return xpos >= 0 && ypos >= 0 && xpos <= x && ypos <= y;
@@ -53,6 +53,8 @@ public class Position {
     // HUGE THANK YOU TO MAZENK FOR THIS PIECE OF CODE
     // https://github.students.cs.ubc.ca/CPSC210/Snake
     // Console-Lanterna/blob/main/src/main/java/com/mazenk/snake/model/Position.java
+
+    // EFFECTS: overrides the equals method for object comparison
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -68,6 +70,8 @@ public class Position {
     // HUGE THANK YOU TO MAZENK FOR THIS PIECE OF CODE
     // https://github.students.cs.ubc.ca/CPSC210/Sn
     // akeConsole-Lanterna/blob/main/src/main/java/com/mazenk/snake/model/Position.java
+
+    // EFFECTS: overrides the hashCode method for object comparison
     @Override
     public int hashCode() {
         return Objects.hash(xpos, ypos);

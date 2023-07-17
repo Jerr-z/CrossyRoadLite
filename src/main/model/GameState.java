@@ -9,10 +9,10 @@ import java.util.stream.IntStream;
 public class GameState {
 
     public static final int CAMERA_SPD = 1;
-    public static final int CHICKEN_SPD = 1;
+    public static final int CHICKEN_SPD = 2;
     public static final int CAR_SPD_LW = 1;
-    public static final int CAR_SPD_HI = 3;
-    public static final int CAR_GEN_PROB = 4; // 1 out of cargenprob
+    public static final int CAR_SPD_HI = 2;
+    public static final int CAR_GEN_PROB = 8; // 1 out of cargenprob
 
     private HashSet<Position> listOfTrees = new HashSet<>();
     private HashSet<Position> listOfGrass = new HashSet<>();
@@ -24,18 +24,22 @@ public class GameState {
     private String input;
 
 
-    // Constructor
+    // EFFECTS: creates a GameState object with score of 0, canvasSize and initial level
+    // REQUIRES: canvasSize > 3
     public GameState(int canvasSize) {
         score = 0;
+        this.canvasSize = canvasSize;
         // generate an initial level of canvasSize x canvasSize
         initializeLevel();
         // places chicken in the middle third last row in the middle
         placeChicken();
 
-        this.canvasSize = canvasSize;
         this.input = "none";
     }
 
+    // MODIFIES: this
+    // EFFECTS: updates various states of the game, main tick function
+    // REQUIRES: input must be one of "up", "down", "left" or "right"
     public void tick(String input) {
         this.input = input; // updates user input
         updateGameCamera(); // shifts everything from cam perspective
@@ -47,7 +51,8 @@ public class GameState {
 
     }
 
-    // REQUIRES: canvasSize > 3
+    // MODIFIES: this
+    // EFFECTS: randomly generates a level for the player
     public void initializeLevel() {
         // creates random environment for rows - 3 rows
         for (int i = 0; i < canvasSize - 3; i++) {
@@ -60,15 +65,19 @@ public class GameState {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes a chicken for the player to control
     public void placeChicken() {
         // places the chicken in the 3rd last row, in the middle
         int midpoint = canvasSize / 2;
+        System.out.println(midpoint);
         chicken = new Chicken(new Position(midpoint, canvasSize - 4));
     }
 
-
-    // Main generation function to randomly choose between the 2 terrains
-    // Generates a single strip of terrain
+    // MODIFIES: this
+    // EFFECTS: Main level generation function to randomly choose between the 2 terrains,
+    // generates a single strip of terrain
+    // REQUIRES: 0 <= y <= canvasSize
     public void generateTerrain(int y) {
         int choice = ThreadLocalRandom.current().nextInt(0,4);
         if (choice == 0) {
@@ -80,20 +89,24 @@ public class GameState {
         }
     }
 
-    // Generate grass level with length x at row y, with tree on or off
+    // MODIFIES: this
+    // EFFECTS: Generates a strip of grass level with length x at row y, with tree on or off
+    // REQUIRES: 0 <= x,y <= canvasSize
     public void generateGrass(int x, int y, boolean tree) {
         for (int i = 0; i < x; i++) {
             listOfGrass.add(new Position(i, y));
             if (tree) {
-                int choice = ThreadLocalRandom.current().nextInt(0,2);
+                int choice = ThreadLocalRandom.current().nextInt(0,5);
                 if (choice == 0) {
-                    generateTree(x,y);
+                    generateTree(i,y);
                 }
             }
         }
     }
 
-    // Generate road level
+    // MODIFIES: this
+    // EFFECTS: adds a road object to listOfRoads with road at level y.
+    // REQUIRES: 0 <= y <= canvasSize
     public void generateRoad(int y) {
         Road road = new Road(y);
         if (!listOfRoads.contains(road)) {
@@ -101,23 +114,26 @@ public class GameState {
         }
     }
 
-    // Generate tree on grass with random probability
+    // MODIFIES: this
+    // EFFECTS: Generates a tree block on grass
+    // REQUIRES: 0 <= x,y <= canvasSize
     public void generateTree(int x, int y) {
         listOfTrees.add(new Position(x,y));
     }
 
-    // randomly generate cars on all the roads
+    // MODIFIES: this
+    // EFFECTS: Randomly generate cars on all the roads
     public void generateCars() {
         // use random for a small chance to generate car per tick
         for (Road r: listOfRoads) {
             int choice = ThreadLocalRandom.current().nextInt(0,CAR_GEN_PROB);
             if (choice == 0) {
-                r.generateCar(canvasSize);
+                listOfCars.add(r.generateCar(canvasSize));
             }
         }
     }
 
-    // check chicken death
+    // EFFECTS: checks if chicken hits a car or goes below the bottom bound
     public boolean isChickenDead() {
         // iterate through cars
         Iterator<Car> carIterator = listOfCars.iterator();
@@ -143,7 +159,8 @@ public class GameState {
         return false;
     }
 
-    // update camera (shift everything down)
+    // MODIFIES: this
+    // EFFECTS: shifts every game object's position down and removes objects out of view
     public void updateGameCamera() {
         removeBottomTerrain();
         chicken.updatePos(0, CAMERA_SPD);
@@ -151,10 +168,10 @@ public class GameState {
         moveGrassDown();
         moveTreesDown();
         moveCarsDown();
-
     }
 
-    // sub function for updateGameCamera, moves the road down
+    // MODIFIES: this
+    // EFFECTS: sub function for updateGameCamera, moves the road down
     public void moveRoadDown() {
         // move road down
         Iterator<Road> roadIterator = listOfRoads.iterator();
@@ -164,7 +181,8 @@ public class GameState {
         }
     }
 
-    // sub function for updateGameCamera, moves the grass down
+    // MODIFIES: this
+    // EFFECTS: sub function for updateGameCamera, moves the grass down
     public void moveGrassDown() {
         //move grass down
         Iterator<Position>  grassIterator = listOfGrass.iterator();
@@ -174,7 +192,8 @@ public class GameState {
         }
     }
 
-    // sub function for updateGameCamera, moves the Trees down
+    // MODIFIES: this
+    // EFFECTS: sub function for updateGameCamera, moves the Trees down
     public void moveTreesDown() {
         // move trees down
         Iterator<Position> treeIterator = listOfTrees.iterator();
@@ -184,7 +203,8 @@ public class GameState {
         }
     }
 
-    // sub function for updateGameCamera, moves the Cars down
+    // MODIFIES: this
+    // EFFECTS: sub function for updateGameCamera, moves the Cars down
     public void moveCarsDown() {
         // move cars down
         Iterator<Car> carIterator = listOfCars.iterator();
@@ -194,7 +214,8 @@ public class GameState {
         }
     }
 
-    // update chicken position based on user input
+    // MODIFIES: this
+    // EFFECTS: update chicken position based on user input
     public void updateChicken() {
         HashSet<Position> nextPos = nextValidPosForChicken();
         Position stepRight = new Position(chicken.getPosition().getX() + 1, chicken.getPosition().getY());
@@ -203,20 +224,21 @@ public class GameState {
         Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - 1);
         // update chicken position based on input
         if (input == "up" && nextPos.contains(stepUp)) {
-            chicken.updatePos(0,-1);
+            chicken.updatePos(0,-CHICKEN_SPD);
             updateScore(1);
         } else if (input == "down" && nextPos.contains(stepDown)) {
-            chicken.updatePos(0,1);
-            updateScore(-1);
+            chicken.updatePos(0,CHICKEN_SPD);
+            updateScore(-CHICKEN_SPD);
         } else if (input == "left" && nextPos.contains(stepLeft)) {
-            chicken.updatePos(-1,0);
+            chicken.updatePos(-CHICKEN_SPD,0);
         } else if (input == "right" && nextPos.contains(stepRight)) {
-            chicken.updatePos(1,0);
+            chicken.updatePos(CHICKEN_SPD,0);
         }
         return;
     }
 
-    // moves the cars in their direction with their speed
+    // MODIFIES: this
+    // EFFECTS: moves the cars in their direction with their speed
     public void updateCars() {
         removeCarsOutOfBounds();
         // iterate through listOfCars
@@ -227,11 +249,14 @@ public class GameState {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: deletes cars that are out of left right bound
     public void removeCarsOutOfBounds() {
         // TODO
     }
 
-
+    // MODIFIES: this
+    // EFFECTS: removes the terrain that's out of bottom bound
     public void removeBottomTerrain() {
         Iterator<Road> roadIterator = listOfRoads.iterator();
         Iterator<Position> treeIterator = listOfTrees.iterator();
@@ -260,8 +285,13 @@ public class GameState {
 
     }
 
+    // EFFECTS: returns the possible positions for a chicken to go to
     public HashSet<Position> nextValidPosForChicken() {
         HashSet<Position> nextPos = new HashSet<>();
+        //Position stepRight = new Position(chicken.getPosition().getX() + CHICKEN_SPD, chicken.getPosition().getY());
+        //Position stepLeft = new Position(chicken.getPosition().getX() - CHICKEN_SPD, chicken.getPosition().getY());
+        //Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + CHICKEN_SPD);
+        //Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - CHICKEN_SPD);
         Position stepRight = new Position(chicken.getPosition().getX() + 1, chicken.getPosition().getY());
         Position stepLeft = new Position(chicken.getPosition().getX() - 1, chicken.getPosition().getY());
         Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + 1);
@@ -286,7 +316,8 @@ public class GameState {
         return nextPos;
     }
 
-    // update score
+    // MODIFIES: this
+    // EFFECTS: updates the score
     public void updateScore(int delta) {
         score += delta;
     }
