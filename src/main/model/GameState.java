@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 public class GameState {
 
     public static final int CAMERA_SPD = 1;
-    public static final int CHICKEN_SPD = 1;
+    public static final int CHICKEN_SPD = 2;
     public static final int CAR_SPD_LW = 1;
     public static final int CAR_SPD_HI = 2;
     public static final int CAR_GEN_PROB = 8; // 1 out of cargenprob

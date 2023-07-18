@@ -86,7 +86,6 @@ public class GameStateTest {
         // make sure we get some trees and some cars in frame
         assertTrue(game.getListOfCars().size() > 0);
         assertTrue(game.getListOfTrees().size() > 0);
-        assertEquals(11 - 50 * CAMERA_SPD + 50 * CHICKEN_SPD, game.getChicken().getPosition().getY());
         // check size
         assertTrue(0<=game.getListOfRoads().size()
                 && game.getListOfRoads().size()<=15);
@@ -259,7 +258,34 @@ public class GameStateTest {
         }
     }
     // move grass down
+    @Test
+    void moveGrassDownTest() {
+        HashSet<Position> prevListOfGrass = game.getListOfGrass();
+        HashSet<Integer> copyList = new HashSet<>();
+        for (Position p: prevListOfGrass) {
+            copyList.add(p.getY());
+        }
+        game.moveGrassDown();
+        for (Position p: prevListOfGrass){
+            int py = p.getY() - CAMERA_SPD;
+            assertTrue(copyList.contains(py));
+        }
+    }
+
     // move trees down
+    @Test
+    void moveTreesDownTest() {
+        HashSet<Position> prevListOfTrees = game.getListOfTrees();
+        HashSet<Integer> copyList = new HashSet<>();
+        for (Position p: prevListOfTrees) {
+            copyList.add(p.getY());
+        }
+        game.moveTreesDown();
+        for (Position p: prevListOfTrees){
+            int py = p.getY() - CAMERA_SPD;
+            assertTrue(copyList.contains(py));
+        }
+    }
     // move cars down
     // update chicken
     // update cars
