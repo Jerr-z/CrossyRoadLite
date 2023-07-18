@@ -128,7 +128,7 @@ public class Terminal {
     // EFFECTS: draws chicken on screen
     private void drawChicken() {
         Chicken chicken = game.getChicken();
-        drawAt(chicken.getPosition(), TextColor.ANSI.BLUE, '\u00FE');
+        drawAt(chicken.getPosition(), TextColor.ANSI.BLUE, (char) 254);
     }
 
     // MODIFIES: screen
@@ -138,7 +138,7 @@ public class Terminal {
         Iterator<Position> grassIterator = listOfGrass.iterator();
         while (grassIterator.hasNext()) {
             Position grass = grassIterator.next();
-            drawAt(grass, TextColor.ANSI.GREEN, '\u00FE');
+            drawAt(grass, TextColor.ANSI.GREEN, (char) 254);
         }
     }
 
@@ -149,7 +149,7 @@ public class Terminal {
         Iterator<Position> treeIterator = listOfTrees.iterator();
         while (treeIterator.hasNext()) {
             Position tree = treeIterator.next();
-            drawAt(tree, TextColor.ANSI.CYAN, '\u00FE');
+            drawAt(tree, TextColor.ANSI.CYAN, (char) 254);
         }
     }
 
@@ -161,7 +161,7 @@ public class Terminal {
         while (carIterator.hasNext()) {
             Car car = carIterator.next();
             Position carPos = car.getPosition();
-            drawAt(carPos, TextColor.ANSI.RED, '\u00FE');
+            drawAt(carPos, TextColor.ANSI.RED, (char) 254);
         }
     }
 
@@ -174,7 +174,7 @@ public class Terminal {
             Road road = roadIterator.next();
             int roadPos = road.getPosition();
             for (int i = 0; i < CANVAS_SIZE; i++) {
-                drawAt(new Position(i, roadPos), TextColor.ANSI.WHITE, '\u00FE');
+                drawAt(new Position(i, roadPos), TextColor.ANSI.WHITE, (char) 254);
             }
         }
     }
