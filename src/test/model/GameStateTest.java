@@ -225,6 +225,13 @@ public class GameStateTest {
         assertFalse(game.isChickenDead());
     }
 
+    @Test
+    void isChickenDeadTest4() {
+        Car testCar = new Car(1, game.getChicken().getPosition(),-1);
+        game.getListOfCars().add(testCar);
+        assertTrue(game.isChickenDead());
+    }
+
     // update game camera
     @Test
     void updateGameCameraTest() {
