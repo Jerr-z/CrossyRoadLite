@@ -147,15 +147,8 @@ public class GameState {
         if (chickenY >= canvasSize - 1) {
             return true;
         }
-        while (carIterator.hasNext()) {
-            Car car = carIterator.next();
-            int carX = car.getPosition().getX();
-            int carY = car.getPosition().getY();
-            int carSpd = car.getSpeed();
-            //List<Integer> carHitBox = IntStream.rangeClosed(carX - carSpd, carX)
-                    //.boxed().collect(Collectors.toList());
-            // if car passed thru chicken after tick
-            if (chickenY == carY && chickenX == carX) {
+        for (Car c: listOfCars) {
+            if (chicken.getPosition().equals(c.getPosition())) {
                 return true;
             }
         }
