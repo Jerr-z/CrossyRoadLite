@@ -56,9 +56,10 @@ public class PositionTest {
     // equals
     @Test
     void equalsTest() {
-        assertEquals(position, position);
-        assertNotEquals(null, position);
-        assertEquals(position, new Position(5, 5));
+        assertTrue(position.equals(new Position(5,5)));
+        assertTrue(position.equals(position));
+        assertFalse(position.equals(null));
+        assertFalse(position.equals(3));
     }
 
     // hashcode

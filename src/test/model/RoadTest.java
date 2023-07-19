@@ -48,7 +48,7 @@ public class RoadTest {
             if (r.getDirection() == -1) {
                 assertEquals(15, c.getPosition().getX());
                 assertEquals(r.getCarSpeed(), -c.getSpeed());
-            } else {
+            } else if (r.getDirection() == 1) {
                 assertEquals(0, c.getPosition().getX());
                 assertEquals(r.getCarSpeed(), c.getSpeed());
             }
@@ -59,9 +59,10 @@ public class RoadTest {
     @Test
     void equalsTest() {
         Road otherRoad = new Road(1);
-        assertEquals(r, otherRoad);
-        assertEquals(r, r);
-        assertNotEquals(null, r);
+        assertTrue(r.equals(otherRoad));
+        assertFalse(r.equals(null));
+        assertFalse(r.equals("yoooo"));
+        assertTrue(r.equals(r));
     }
 
     // hashcode

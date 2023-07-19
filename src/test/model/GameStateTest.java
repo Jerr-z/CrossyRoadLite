@@ -220,6 +220,11 @@ public class GameStateTest {
         assertTrue(game.isChickenDead());
     }
 
+    @Test
+    void isChickenDeadTest3() {
+        assertFalse(game.isChickenDead());
+    }
+
     // update game camera
     @Test
     void updateGameCameraTest() {
@@ -363,11 +368,20 @@ public class GameStateTest {
     // remove car out of bounds
     @Test
     void removeCarsOutOfBoundsTest() {
-        for (int i = 0; i <= game.getCanvasSize()+1; i++) {
-            game.updateCars();
+        HashSet<Car> almostGone = new HashSet<>();
+        for (Car c: game.getListOfCars()) {
+            if ((c.getSpeed() > 0
+                    && c.getPosition().getX() + c.getSpeed()
+                    >= game.getCanvasSize())
+                    || c.getSpeed() < 0
+            && c.getPosition().getX() + c.getSpeed() <= 0) {
+                almostGone.add(c);
+            }
         }
-        game.removeCarsOutOfBounds();
-        assertEquals(0, game.getListOfCars().size());
+        game.updateCars();
+        for (Car c: almostGone) {
+            assertFalse(game.getListOfCars().contains(c));
+        }
     }
 
     // remove bottom terrain
