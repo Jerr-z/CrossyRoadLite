@@ -42,7 +42,7 @@ public class GameStateTest {
     @Test
     void initializeLevelTest() {
         game.initializeLevel();
-        assertTrue(0<=game.getListOfRoads().size()
+        assertTrue(0<game.getListOfRoads().size()
                 && game.getListOfRoads().size()<=15);
         assertTrue(3*15<=game.getListOfGrass().size()
                 && game.getListOfGrass().size()<=15*15);
@@ -483,6 +483,82 @@ public class GameStateTest {
         assertTrue(game.nextValidPosForChicken().contains(stepRight));
     }
 
+    @Test
+    void nextValidPosForChickenTest3() {
+        Chicken chicken = game.getChicken();
+        Position stepRight = new Position(chicken.getPosition().getX() + CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepLeft = new Position(chicken.getPosition().getX() - CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + CHICKEN_SPD);
+        Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - CHICKEN_SPD);
+        HashSet<Position> lot = game.getListOfTrees();
+        Iterator<Position> treeIter = lot.iterator();
+
+        while (treeIter.hasNext()) {
+            Position tree = treeIter.next();
+            if (stepUp.equals(tree)) {
+                treeIter.remove();
+            }
+        }
+        assertTrue(game.nextValidPosForChicken().contains(stepUp));
+    }
+
+    @Test
+    void nextValidPosForChickenTest4() {
+        Chicken chicken = game.getChicken();
+        Position stepRight = new Position(chicken.getPosition().getX() + CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepLeft = new Position(chicken.getPosition().getX() - CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + CHICKEN_SPD);
+        Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - CHICKEN_SPD);
+        HashSet<Position> lot = game.getListOfTrees();
+        Iterator<Position> treeIter = lot.iterator();
+
+        while (treeIter.hasNext()) {
+            Position tree = treeIter.next();
+            if (stepDown.equals(tree)) {
+                treeIter.remove();
+            }
+        }
+
+        assertTrue(game.nextValidPosForChicken().contains(stepDown));
+    }
+
+    @Test
+    void nextValidPosForChickenTest5() {
+        Chicken chicken = game.getChicken();
+        Position stepRight = new Position(chicken.getPosition().getX() + CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepLeft = new Position(chicken.getPosition().getX() - CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + CHICKEN_SPD);
+        Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - CHICKEN_SPD);
+        HashSet<Position> lot = game.getListOfTrees();
+        Iterator<Position> treeIter = lot.iterator();
+
+        while (treeIter.hasNext()) {
+            Position tree = treeIter.next();
+            if (stepLeft.equals(tree)) {
+                treeIter.remove();
+            }
+        }
+        assertTrue(game.nextValidPosForChicken().contains(stepLeft));
+    }
+
+    @Test
+    void nextValidPosForChickenTest6() {
+        Chicken chicken = game.getChicken();
+        Position stepRight = new Position(chicken.getPosition().getX() + CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepLeft = new Position(chicken.getPosition().getX() - CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + CHICKEN_SPD);
+        Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - CHICKEN_SPD);
+        HashSet<Position> lot = game.getListOfTrees();
+        Iterator<Position> treeIter = lot.iterator();
+
+        while (treeIter.hasNext()) {
+            Position tree = treeIter.next();
+            if (stepRight.equals(tree)) {
+                treeIter.remove();
+            }
+        }
+        assertTrue(game.nextValidPosForChicken().contains(stepRight));
+    }
     // update score
     @Test
     void updateScoreTest() {
