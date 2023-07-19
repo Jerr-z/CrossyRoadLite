@@ -48,7 +48,8 @@ public class RoadTest {
             if (r.getDirection() == -1) {
                 assertEquals(15, c.getPosition().getX());
                 assertEquals(r.getCarSpeed(), -c.getSpeed());
-            } else if (r.getDirection() == 1) {
+            }
+            if (r.getDirection() == 1) {
                 assertEquals(0, c.getPosition().getX());
                 assertEquals(r.getCarSpeed(), c.getSpeed());
             }

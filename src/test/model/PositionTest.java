@@ -51,6 +51,8 @@ public class PositionTest {
         assertFalse(position.withinBoundary(4,4));
         assertTrue(position.withinBoundary(1000,1000));
         assertFalse(position.withinBoundary(1,1));
+        position = new Position(0,0);
+        assertTrue(position.withinBoundary(0,0));
     }
 
     // equals
