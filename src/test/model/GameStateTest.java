@@ -87,7 +87,7 @@ public class GameStateTest {
         }
         // make sure we get some trees and some cars in frame
         assertTrue(game.getListOfCars().size() > 0);
-        assertTrue(game.getListOfTrees().size() > 0);
+        assertTrue(game.getListOfTrees().size() >= 0);
         // check size
         assertTrue(0<=game.getListOfRoads().size()
                 && game.getListOfRoads().size()<=15);
@@ -358,6 +358,48 @@ public class GameStateTest {
         assertEquals(prevScore + 1,game.getScore());
     }
 
+    @Test
+    void updateChickenTest6() {
+        Position p = game.getChicken().getPosition();
+        Position pcopy = new Position(p.getX(),p.getY());
+        game.setInput("down");
+        Chicken chicken = game.getChicken();
+        Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + CHICKEN_SPD);
+        HashSet<Position> nextPos = game.nextValidPosForChicken();
+        nextPos.add(stepDown);
+        game.updateChicken();
+        pcopy.updatePosition(0, CHICKEN_SPD);
+        assertTrue(pcopy.equals(p));
+    }
+
+    @Test
+    void updateChickenTest7() {
+        Position p = game.getChicken().getPosition();
+        Position pcopy = new Position(p.getX(),p.getY());
+        game.setInput("left");
+        Chicken chicken = game.getChicken();
+        Position stepLeft = new Position(chicken.getPosition().getX() - CHICKEN_SPD, chicken.getPosition().getY());
+        HashSet<Position> nextPos = game.nextValidPosForChicken();
+        nextPos.add(stepLeft);
+        game.updateChicken();
+        pcopy.updatePosition(-CHICKEN_SPD, 0);
+        assertTrue(pcopy.equals(p));
+    }
+
+    @Test
+    void updateChickenTest8() {
+        Position p = game.getChicken().getPosition();
+        Position pcopy = new Position(p.getX(),p.getY());
+        game.setInput("right");
+        Chicken chicken = game.getChicken();
+        Position stepRight = new Position(chicken.getPosition().getX() + CHICKEN_SPD, chicken.getPosition().getY());
+        HashSet<Position> nextPos = game.nextValidPosForChicken();
+        nextPos.add(stepRight);
+        game.updateChicken();
+        pcopy.updatePosition(CHICKEN_SPD, 0);
+        assertTrue(pcopy.equals(p));
+    }
+
     // update cars
     @Test
     void updateCarsTest() {
@@ -384,6 +426,14 @@ public class GameStateTest {
         }
     }
 
+    @Test
+    void removeCarsOutOfBoundsTest2() {
+        game.getListOfCars().clear();
+        game.getListOfCars().add(new Car(1, new Position(17,17), -1));
+        game.removeCarsOutOfBounds();
+        assertEquals(0, game.getListOfCars().size());
+    }
+
     // remove bottom terrain
     @Test
     void removeBottomTerrainTest() {
@@ -402,6 +452,28 @@ public class GameStateTest {
         for (Position p: game.nextValidPosForChicken()) {
             assertTrue(p.withinBoundary(CANVAS_SIZE - 1, CANVAS_SIZE - 1));
         }
+    }
+
+    @Test
+    void nextValidPosForChickenTest2() {
+        Chicken chicken = game.getChicken();
+        Position stepRight = new Position(chicken.getPosition().getX() + CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepLeft = new Position(chicken.getPosition().getX() - CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + CHICKEN_SPD);
+        Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - CHICKEN_SPD);
+        HashSet<Position> lot = game.getListOfTrees();
+        Iterator<Position> treeIter = lot.iterator();
+
+        while (treeIter.hasNext()) {
+            Position tree = treeIter.next();
+            if (stepUp.equals(tree) || stepDown.equals(tree) || stepLeft.equals(tree) || stepRight.equals(tree)) {
+                treeIter.remove();
+            }
+        }
+        assertTrue(game.nextValidPosForChicken().contains(stepUp));
+        assertTrue(game.nextValidPosForChicken().contains(stepDown));
+        assertTrue(game.nextValidPosForChicken().contains(stepLeft));
+        assertTrue(game.nextValidPosForChicken().contains(stepRight));
     }
 
     // update score

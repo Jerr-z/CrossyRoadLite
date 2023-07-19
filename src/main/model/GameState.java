@@ -362,4 +362,8 @@ public class GameState {
         return canvasSize;
     }
 
+    public void setInput(String input) {
+        this.input = input;
+    }
+
 }
