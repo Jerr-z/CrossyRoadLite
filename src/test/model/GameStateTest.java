@@ -227,9 +227,21 @@ public class GameStateTest {
 
     @Test
     void isChickenDeadTest4() {
+        // chicken has the same pos as car
         Car testCar = new Car(1, game.getChicken().getPosition(),-1);
         game.getListOfCars().add(testCar);
         assertTrue(game.isChickenDead());
+    }
+
+    @Test
+    void isChickenDeadTest5() {
+        // listofcar has car but chicken not dead
+        Position carPos = new Position(game.getChicken().getPosition().getX() + 1,
+                game.getChicken().getPosition().getY()+1);
+        Car testCar = new Car(1, carPos,-1);
+        game.getListOfCars().clear();
+        game.getListOfCars().add(testCar);
+        assertFalse(game.isChickenDead());
     }
 
     // update game camera
