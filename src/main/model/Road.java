@@ -7,6 +7,7 @@ import static model.GameState.CAR_SPD_HI;
 import static model.GameState.CAR_SPD_LW;
 
 // Represents a road on the map which can spawn cars, only has y coord
+// has a direction which cars travel in and their speed
 public class Road {
     private int direction; // 1: R -1: L
     private int carSpeed;
@@ -25,10 +26,13 @@ public class Road {
 
     }
 
+    // EFFECTS: updates the y position of the road by dy
+    // MODIFIES: this
     public void update(int dy) {
         this.ypos += dy;
     }
 
+    // EFFECTS: returns the y position of the object
     public int getPosition() {
         return this.ypos;
     }
@@ -44,6 +48,15 @@ public class Road {
         return car;
     }
 
+    // EFFECTS: returns the direction which cars go on the road
+    public int getDirection() {
+        return this.direction;
+    }
+
+    // EFFECTS: returns how fast cars go on this road
+    public int getCarSpeed() {
+        return this.carSpeed;
+    }
     // HUGE THANK YOU TO MAZENK FOR THIS PIECE OF CODE
     // https://github.students.cs.ubc.ca/CPSC210/Snake
     // Console-Lanterna/blob/main/src/main/java/com/mazenk/snake/model/Position.java
