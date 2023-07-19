@@ -225,12 +225,15 @@ public class GameState {
         if (input == "up" && nextPos.contains(stepUp)) {
             chicken.updatePos(0,-CHICKEN_SPD);
             updateScore(1);
-        } else if (input == "down" && nextPos.contains(stepDown)) {
+        }
+        if (input == "down" && nextPos.contains(stepDown)) {
             chicken.updatePos(0,CHICKEN_SPD);
             updateScore(-1);
-        } else if (input == "left" && nextPos.contains(stepLeft)) {
+        }
+        if (input == "left" && nextPos.contains(stepLeft)) {
             chicken.updatePos(-CHICKEN_SPD,0);
-        } else if (input == "right" && nextPos.contains(stepRight)) {
+        }
+        if (input == "right" && nextPos.contains(stepRight)) {
             chicken.updatePos(CHICKEN_SPD,0);
         }
         return;
