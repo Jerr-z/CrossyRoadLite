@@ -25,20 +25,6 @@ public class Position {
     }
 
     // MODIFIES: this
-    // REQUIRES: x>=0
-    // EFFECTS: changes the x value
-    public void setX(int x) {
-        this.xpos = x;
-    }
-
-    // MODIFIES: this
-    // REQUIRES: y>=0
-    // EFFECTS: changes the y value
-    public void setY(int y) {
-        this.ypos = y;
-    }
-
-    // MODIFIES: this
     // EFFECTS: changes the current position by shifting dx and dy units.
     public void updatePosition(int dx, int dy) {
         this.xpos += dx;

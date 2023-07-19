@@ -3,6 +3,8 @@ package model;
 import static model.GameState.CAMERA_SPD;
 import static model.GameState.CHICKEN_SPD;
 import static org.junit.jupiter.api.Assertions.*;
+import static ui.Terminal.CANVAS_SIZE;
+
 import org.junit.jupiter.api.*;
 
 import java.util.HashSet;
@@ -287,10 +289,116 @@ public class GameStateTest {
         }
     }
     // move cars down
+    @Test
+    void moveCarsDownTest() {
+        HashSet<Car> prevListOfCars = game.getListOfCars();
+        HashSet<Integer> copyList = new HashSet<>();
+        for (Car c: prevListOfCars) {
+            copyList.add(c.getPosition().getY());
+        }
+        game.moveCarsDown();
+        for (Car c: prevListOfCars) {
+            int py = c.getPosition().getY() - CAMERA_SPD;
+            assertTrue(copyList.contains(py));
+        }
+    }
+
     // update chicken
+    @Test
+    void updateChickenTest() {
+        Position p = game.getChicken().getPosition();
+        Position pcopy = new Position(p.getX(),p.getY());
+        game.tick("none");
+        pcopy.updatePosition(0, CAMERA_SPD);
+        assertTrue(pcopy.equals(p));
+    }
+
+    @Test
+    void updateChickenTest2() {
+        Position p = game.getChicken().getPosition();
+        Position pcopy = new Position(p.getX(),p.getY());
+        game.tick("right");
+        pcopy.updatePosition(CHICKEN_SPD, CAMERA_SPD);
+        assertTrue(pcopy.equals(p));
+    }
+
+    @Test
+    void updateChickenTest3() {
+        Position p = game.getChicken().getPosition();
+        Position pcopy = new Position(p.getX(),p.getY());
+        game.tick("left");
+        pcopy.updatePosition(-CHICKEN_SPD, CAMERA_SPD);
+        assertTrue(pcopy.equals(p));
+    }
+
+    @Test
+    void updateChickenTest4() {
+        Position p = game.getChicken().getPosition();
+        int prevScore = game.getScore();
+        Position pcopy = new Position(p.getX(),p.getY());
+        game.tick("down");
+        assertEquals(prevScore-1, game.getScore());
+        pcopy.updatePosition(0, CAMERA_SPD+CHICKEN_SPD);
+        assertTrue(pcopy.equals(p));
+    }
+
+    @Test
+    void updateChickenTest5() {
+        Position p = game.getChicken().getPosition();
+        int prevScore = game.getScore();
+        Position pcopy = new Position(p.getX(),p.getY());
+        game.tick("up");
+        pcopy.updatePosition(0, CAMERA_SPD-CHICKEN_SPD);
+        assertTrue(pcopy.equals(p));
+        assertEquals(prevScore + 1,game.getScore());
+    }
+
     // update cars
+    @Test
+    void updateCarsTest() {
+        game.updateCars();
+        assertTrue(game.getListOfCars().size()<= game.getCanvasSize()*game.getCanvasSize());
+    }
+
     // remove car out of bounds
+    @Test
+    void removeCarsOutOfBoundsTest() {
+        for (int i = 0; i <= game.getCanvasSize()+1; i++) {
+            game.updateCars();
+        }
+        game.removeCarsOutOfBounds();
+        assertEquals(0, game.getListOfCars().size());
+    }
+
     // remove bottom terrain
+    @Test
+    void removeBottomTerrainTest() {
+        for (int i = 0; i <= game.getCanvasSize()+1; i++) {
+            game.updateGameCamera();
+        }
+        assertEquals(0, game.getListOfCars().size());
+        assertEquals(0, game.getListOfTrees().size());
+        assertEquals(0, game.getListOfGrass().size());
+        assertEquals(0, game.getListOfRoads().size());
+    }
+
     // next valid pos for chicken
+    @Test
+    void nextValidPosForChickenTest() {
+        for (Position p: game.nextValidPosForChicken()) {
+            assertTrue(p.withinBoundary(CANVAS_SIZE - 1, CANVAS_SIZE - 1));
+        }
+    }
+
     // update score
+    @Test
+    void updateScoreTest() {
+        int prevScore = game.getScore();
+        game.updateScore(0);
+        assertEquals(prevScore, game.getScore());
+        game.updateScore(1);
+        assertEquals(prevScore + 1, game.getScore());
+        game.updateScore(-1);
+        assertEquals(prevScore, game.getScore());
+    }
 }

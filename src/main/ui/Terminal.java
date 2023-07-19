@@ -19,7 +19,7 @@ import model.*;
 
 
 public class Terminal {
-    public static final int FPS = 1;
+    public static final int FPS = 2;
     public static final int CANVAS_SIZE = 20;
     private GameState game;
     private Screen screen;

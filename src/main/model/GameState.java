@@ -224,17 +224,17 @@ public class GameState {
     // EFFECTS: update chicken position based on user input
     public void updateChicken() {
         HashSet<Position> nextPos = nextValidPosForChicken();
-        Position stepRight = new Position(chicken.getPosition().getX() + 1, chicken.getPosition().getY());
-        Position stepLeft = new Position(chicken.getPosition().getX() - 1, chicken.getPosition().getY());
-        Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + 1);
-        Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - 1);
+        Position stepRight = new Position(chicken.getPosition().getX() + CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepLeft = new Position(chicken.getPosition().getX() - CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + CHICKEN_SPD);
+        Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - CHICKEN_SPD);
         // update chicken position based on input
         if (input == "up" && nextPos.contains(stepUp)) {
             chicken.updatePos(0,-CHICKEN_SPD);
             updateScore(1);
         } else if (input == "down" && nextPos.contains(stepDown)) {
             chicken.updatePos(0,CHICKEN_SPD);
-            updateScore(-CHICKEN_SPD);
+            updateScore(-1);
         } else if (input == "left" && nextPos.contains(stepLeft)) {
             chicken.updatePos(-CHICKEN_SPD,0);
         } else if (input == "right" && nextPos.contains(stepRight)) {
@@ -273,83 +273,52 @@ public class GameState {
     // of view
     // MODIFIES: this
     public void removeBottomGrass() {
-        Iterator<Position> grassIterator = listOfGrass.iterator();
-        while (grassIterator.hasNext()) {
-            Position grass = grassIterator.next();
-            if (grass.getY() == canvasSize - 1) {
-                grassIterator.remove();
-            }
-        }
+        listOfGrass.removeIf(grass -> grass.getY() == canvasSize - 1);
     }
 
     // EFFECTS: removes the most bottom layer of trees if its about to be phased out
     // of view
     // MODIFIES: this
     public void removeBottomTrees() {
-        Iterator<Position> treeIterator = listOfTrees.iterator();
-        while (treeIterator.hasNext()) {
-            Position tree = treeIterator.next();
-            if (tree.getY() == canvasSize - 1) {
-                treeIterator.remove();
-            }
-        }
+        listOfTrees.removeIf(tree -> tree.getY() == canvasSize - 1);
     }
 
     // EFFECTS: removes the most bottom layer of cars if its about to be phased out
     // of view
     // MODIFIES: this
     public void removeBottomCars() {
-        Iterator<Car> carIterator = listOfCars.iterator();
-        while (carIterator.hasNext()) {
-            Car car = carIterator.next();
-            if (car.getPosition().getY() == canvasSize - 1) {
-                carIterator.remove();
-            }
-        }
+        listOfCars.removeIf(car -> car.getPosition().getY() == canvasSize - 1);
     }
 
     // EFFECTS: removes bottom layer of roads if its about to be phased out
     // MODIFIES: this
     public void removeBottomRoad() {
-        Iterator<Road> roadIterator = listOfRoads.iterator();
-        while (roadIterator.hasNext()) {
-            Road road = roadIterator.next();
-            if (road.getPosition() == canvasSize - 1) {
-                roadIterator.remove();
-            }
-        }
+        listOfRoads.removeIf(road -> road.getPosition() == canvasSize - 1);
     }
 
 
     // EFFECTS: returns the possible positions for a chicken to go to
     public HashSet<Position> nextValidPosForChicken() {
         HashSet<Position> nextPos = new HashSet<>();
-        // TODO
-        // correct implementation isn't working for some wack reason
-
-        /*Position stepRight = new Position(chicken.getPosition().getX() + CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepRight = new Position(chicken.getPosition().getX() + CHICKEN_SPD, chicken.getPosition().getY());
         Position stepLeft = new Position(chicken.getPosition().getX() - CHICKEN_SPD, chicken.getPosition().getY());
         Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + CHICKEN_SPD);
-        Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - CHICKEN_SPD);*/
-        Position stepRight = new Position(chicken.getPosition().getX() + 1, chicken.getPosition().getY());
-        Position stepLeft = new Position(chicken.getPosition().getX() - 1, chicken.getPosition().getY());
-        Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + 1);
-        Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - 1);
+        Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - CHICKEN_SPD);
 
         if (!listOfTrees.contains(stepRight)
-                && stepRight.withinBoundary(canvasSize, canvasSize)) {
+                && stepRight.withinBoundary(canvasSize - 1, canvasSize - 1)) {
             nextPos.add(stepRight);
         }
         if (!listOfTrees.contains(stepLeft)
-                && stepRight.withinBoundary(canvasSize, canvasSize)) {
+                && stepLeft.withinBoundary(canvasSize - 1, canvasSize - 1)) {
             nextPos.add(stepLeft);
         }
         if (!listOfTrees.contains(stepDown)
-                && stepRight.withinBoundary(canvasSize, canvasSize)) {
+                && stepDown.withinBoundary(canvasSize - 1, canvasSize - 1)) {
             nextPos.add(stepDown);
         }
         if (!listOfTrees.contains(stepUp)
-                && stepRight.withinBoundary(canvasSize, canvasSize)) {
+                && stepUp.withinBoundary(canvasSize - 1, canvasSize - 1)) {
             nextPos.add(stepUp);
         }
         return nextPos;
