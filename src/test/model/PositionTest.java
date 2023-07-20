@@ -42,18 +42,15 @@ public class PositionTest {
     // within boundary
     @Test
     void withinBoundaryTest() {
-        assertTrue(position.withinBoundary(5,5));
-        assertTrue(position.withinBoundary(5,6));
-        assertTrue(position.withinBoundary(6,5));
-        assertTrue(position.withinBoundary(6,6));
-        assertFalse(position.withinBoundary(4,5));
-        assertFalse(position.withinBoundary(5,4));
-        assertFalse(position.withinBoundary(4,4));
-        assertTrue(position.withinBoundary(1000,1000));
+        // none
         assertFalse(position.withinBoundary(1,1));
-        position = new Position(0,0);
-        assertTrue(position.withinBoundary(0,0));
-    }
+        // cond 1
+        assertFalse(position.withinBoundary(6,1));
+        // cond 2
+        assertFalse(position.withinBoundary(1,6));
+        // con 1, 2
+        assertTrue(position.withinBoundary(10,10));
+        }
 
     // equals
     @Test

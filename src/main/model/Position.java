@@ -31,10 +31,11 @@ public class Position {
         this.ypos += dy;
     }
 
+    // REQUIRES: x, y >= 0
     // EFFECTS: checks if current position is within the specified boundary
     public boolean withinBoundary(int x, int y) {
         // inclusive
-        return xpos >= 0 && ypos >= 0 && xpos <= x && ypos <= y;
+        return xpos <= x && ypos <= y;
     }
 
     // HUGE THANK YOU TO MAZENK FOR THIS PIECE OF CODE

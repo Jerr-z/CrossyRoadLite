@@ -61,6 +61,7 @@ public class Road {
     // https://github.students.cs.ubc.ca/CPSC210/Snake
     // Console-Lanterna/blob/main/src/main/java/com/mazenk/snake/model/Position.java
 
+    // EFFECTS: returns whether 2 objects have equal value
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -76,8 +77,14 @@ public class Road {
     // HUGE THANK YOU TO MAZENK FOR THIS PIECE OF CODE
     // https://github.students.cs.ubc.ca/CPSC210/Snake
     // Console-Lanterna/blob/main/src/main/java/com/mazenk/snake/model/Position.java
+    // EFFECTS: returns object hashcode
     @Override
     public int hashCode() {
         return Objects.hash(ypos);
+    }
+
+    //REQUIRES : direction = 1 or -1
+    public void setDirection(int dir) {
+        this.direction = dir;
     }
 }

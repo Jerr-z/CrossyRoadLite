@@ -56,6 +56,13 @@ public class RoadTest {
         }
     }
 
+    @Test
+    void generateCar1DirectionTest() {
+        r.setDirection(2);
+        Car c = r.generateCar(15);
+        assertEquals(null, c.getPosition());
+    }
+
     // equals
     @Test
     void equalsTest() {
