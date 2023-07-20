@@ -22,6 +22,7 @@ public class GameState {
     private Chicken chicken;
     private int canvasSize;
     private String input;
+    private HashSet<Position> nextStep;
 
 
     // EFFECTS: creates a GameState object with score of 0, canvasSize and initial level
@@ -33,7 +34,7 @@ public class GameState {
         initializeLevel();
         // places chicken in the middle third last row in the middle
         placeChicken();
-
+        this.nextStep = new HashSet<>();
         this.input = "none";
     }
 
@@ -49,6 +50,7 @@ public class GameState {
         removeBottomTrees(); // removes terrain that's phased out from memory
         generateTerrain(0); // generating another layer of terrain
         generateCars(); // roads proc car generation
+        nextStep = nextValidPosForChicken();
         updateCars();// start moving car
         updateChicken(); // update chicken position
 
@@ -216,24 +218,23 @@ public class GameState {
     // MODIFIES: this
     // EFFECTS: update chicken position based on user input
     public void updateChicken() {
-        HashSet<Position> nextPos = nextValidPosForChicken();
         Position stepRight = new Position(chicken.getPosition().getX() + CHICKEN_SPD, chicken.getPosition().getY());
         Position stepLeft = new Position(chicken.getPosition().getX() - CHICKEN_SPD, chicken.getPosition().getY());
         Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + CHICKEN_SPD);
         Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - CHICKEN_SPD);
         // update chicken position based on input
-        if (input == "up" && nextPos.contains(stepUp)) {
+        if (input == "up" && nextStep.contains(stepUp)) {
             chicken.updatePos(0,-CHICKEN_SPD);
             updateScore(1);
         }
-        if (input == "down" && nextPos.contains(stepDown)) {
+        if (input == "down" && nextStep.contains(stepDown)) {
             chicken.updatePos(0,CHICKEN_SPD);
             updateScore(-1);
         }
-        if (input == "left" && nextPos.contains(stepLeft)) {
+        if (input == "left" && nextStep.contains(stepLeft)) {
             chicken.updatePos(-CHICKEN_SPD,0);
         }
-        if (input == "right" && nextPos.contains(stepRight)) {
+        if (input == "right" && nextStep.contains(stepRight)) {
             chicken.updatePos(CHICKEN_SPD,0);
         }
         return;
@@ -362,4 +363,7 @@ public class GameState {
         this.input = input;
     }
 
+    public HashSet<Position> getNextStep() {
+        return this.nextStep;
+    }
 }

@@ -384,10 +384,73 @@ public class GameStateTest {
         game.setInput("down");
         Chicken chicken = game.getChicken();
         Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + CHICKEN_SPD);
-        HashSet<Position> nextPos = game.nextValidPosForChicken();
+        HashSet<Position> nextPos = game.getNextStep();
         nextPos.add(stepDown);
         game.updateChicken();
         pcopy.updatePosition(0, CHICKEN_SPD);
+        assertTrue(pcopy.equals(p));
+    }
+
+    @Test
+    void updateChickenTest9() {
+        Position p = game.getChicken().getPosition();
+        Position pcopy = new Position(p.getX(),p.getY());
+        game.setInput("down");
+        Chicken chicken = game.getChicken();
+        Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + CHICKEN_SPD);
+        HashSet<Position> nextPos = game.getNextStep();
+        Iterator<Position> nextPosIter = nextPos.iterator();
+        while (nextPosIter.hasNext()) {
+            Position pos = nextPosIter.next();
+            if (pos.equals(stepDown)) {
+                nextPosIter.remove();
+            }
+        }
+        // nextPos.add(stepDown);
+        game.updateChicken();
+        //pcopy.updatePosition(0, CHICKEN_SPD);
+        assertTrue(pcopy.equals(p));
+    }
+
+    @Test
+    void updateChickenTest10() {
+        Position p = game.getChicken().getPosition();
+        Position pcopy = new Position(p.getX(),p.getY());
+        game.setInput("left");
+        Chicken chicken = game.getChicken();
+        Position stepLeft = new Position(chicken.getPosition().getX() - CHICKEN_SPD, chicken.getPosition().getY());
+        HashSet<Position> nextPos = game.getNextStep();
+        Iterator<Position> nextPosIter = nextPos.iterator();
+        while (nextPosIter.hasNext()) {
+            Position pos = nextPosIter.next();
+            if (pos.equals(stepLeft)) {
+                nextPosIter.remove();
+            }
+        }
+        // nextPos.add(stepDown);
+        game.updateChicken();
+        //pcopy.updatePosition(0, CHICKEN_SPD);
+        assertTrue(pcopy.equals(p));
+    }
+
+    @Test
+    void updateChickenTest11() {
+        Position p = game.getChicken().getPosition();
+        Position pcopy = new Position(p.getX(),p.getY());
+        game.setInput("right");
+        Chicken chicken = game.getChicken();
+        Position stepRight = new Position(chicken.getPosition().getX() + CHICKEN_SPD, chicken.getPosition().getY());
+        HashSet<Position> nextPos = game.getNextStep();
+        Iterator<Position> nextPosIter = nextPos.iterator();
+        while (nextPosIter.hasNext()) {
+            Position pos = nextPosIter.next();
+            if (pos.equals(stepRight)) {
+                nextPosIter.remove();
+            }
+        }
+        // nextPos.add(stepDown);
+        game.updateChicken();
+        //pcopy.updatePosition(0, CHICKEN_SPD);
         assertTrue(pcopy.equals(p));
     }
 
@@ -398,7 +461,7 @@ public class GameStateTest {
         game.setInput("left");
         Chicken chicken = game.getChicken();
         Position stepLeft = new Position(chicken.getPosition().getX() - CHICKEN_SPD, chicken.getPosition().getY());
-        HashSet<Position> nextPos = game.nextValidPosForChicken();
+        HashSet<Position> nextPos = game.getNextStep();
         nextPos.add(stepLeft);
         game.updateChicken();
         pcopy.updatePosition(-CHICKEN_SPD, 0);
@@ -412,7 +475,7 @@ public class GameStateTest {
         game.setInput("right");
         Chicken chicken = game.getChicken();
         Position stepRight = new Position(chicken.getPosition().getX() + CHICKEN_SPD, chicken.getPosition().getY());
-        HashSet<Position> nextPos = game.nextValidPosForChicken();
+        HashSet<Position> nextPos = game.getNextStep();
         nextPos.add(stepRight);
         game.updateChicken();
         pcopy.updatePosition(CHICKEN_SPD, 0);
