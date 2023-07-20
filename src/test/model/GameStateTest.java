@@ -413,6 +413,41 @@ public class GameStateTest {
     }
 
     @Test
+    void updateChickenTest12() {
+        Position p = game.getChicken().getPosition();
+        Position pcopy = new Position(p.getX(),p.getY());
+        game.setInput("up");
+        Chicken chicken = game.getChicken();
+        Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - CHICKEN_SPD);
+        HashSet<Position> nextPos = game.getNextStep();
+        Iterator<Position> nextPosIter = nextPos.iterator();
+        while (nextPosIter.hasNext()) {
+            Position pos = nextPosIter.next();
+            if (pos.equals(stepUp)) {
+                nextPosIter.remove();
+            }
+        }
+        // nextPos.add(stepDown);
+        game.updateChicken();
+        //pcopy.updatePosition(0, CHICKEN_SPD);
+        assertTrue(pcopy.equals(p));
+    }
+
+    @Test
+    void updateChickenTest13() {
+        Position p = game.getChicken().getPosition();
+        Position pcopy = new Position(p.getX(),p.getY());
+        game.setInput("up");
+        Chicken chicken = game.getChicken();
+        Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - CHICKEN_SPD);
+        HashSet<Position> nextPos = game.getNextStep();
+        nextPos.add(stepUp);
+        game.updateChicken();
+        pcopy.updatePosition(0, -CHICKEN_SPD);
+        assertTrue(pcopy.equals(p));
+    }
+
+    @Test
     void updateChickenTest10() {
         Position p = game.getChicken().getPosition();
         Position pcopy = new Position(p.getX(),p.getY());
