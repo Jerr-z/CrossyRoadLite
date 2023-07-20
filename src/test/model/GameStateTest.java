@@ -634,6 +634,24 @@ public class GameStateTest {
         }
         assertTrue(game.nextValidPosForChicken().contains(stepRight));
     }
+
+    @Test
+    void nextValidPosForChickenTest7() {
+        Chicken chicken = game.getChicken();
+        Position stepRight = new Position(chicken.getPosition().getX() + CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepLeft = new Position(chicken.getPosition().getX() - CHICKEN_SPD, chicken.getPosition().getY());
+        Position stepDown = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() + CHICKEN_SPD);
+        Position stepUp = new Position(chicken.getPosition().getX(), chicken.getPosition().getY() - CHICKEN_SPD);
+        HashSet<Position> lot = game.getListOfTrees();
+        lot.add(stepRight);
+        lot.add(stepLeft);
+        lot.add(stepUp);
+        lot.add(stepDown);
+        assertFalse(game.nextValidPosForChicken().contains(stepRight));
+        assertFalse(game.nextValidPosForChicken().contains(stepLeft));
+        assertFalse(game.nextValidPosForChicken().contains(stepUp));
+        assertFalse(game.nextValidPosForChicken().contains(stepDown));
+    }
     // update score
     @Test
     void updateScoreTest() {
