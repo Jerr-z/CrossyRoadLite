@@ -1,6 +1,7 @@
 package ui;
 
 import java.io.Console;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.http.WebSocket;
@@ -46,12 +47,18 @@ public class Terminal {
         jsonReader = new JsonReader(JSON_STORE);
         TerminalSize terminalSize = screen.getTerminalSize();
         game = new GameState(CANVAS_SIZE);
-        promptRead();
-        // TODO
-        // check if gamestate.json has content, if so make a prompt asking
-        // whether the user wants to load save
+
+        if (isFilePresent(JSON_STORE)) {
+            promptRead();
+        }
 
         startTick();
+    }
+
+    // EFFECTS: checks if file is present
+    private boolean isFilePresent(String filePathString) {
+        File f = new File(filePathString);
+        return f.isFile();
     }
 
     // EFFECTS: saves gamestate to file
@@ -68,7 +75,7 @@ public class Terminal {
 
     private void loadGameState() {
         try {
-            game.clear();
+            game.clear(); // probably not needed but i would rather comment here than delete it :)
             game = jsonReader.read();
             System.out.println("Game loaded from " + JSON_STORE);
         } catch (IOException e) {
@@ -211,7 +218,8 @@ public class Terminal {
 
         if (result == MessageDialogButton.Yes) {
             loadGameState();
-            // TODO wipe save file
+            File f = new File(JSON_STORE);
+            f.delete();
         }
     }
 
