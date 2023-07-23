@@ -1,6 +1,8 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
 import java.util.Objects;
@@ -77,5 +79,26 @@ public class RoadTest {
     @Test
     void hashCodeTest() {
         assertEquals(Objects.hash(r.getPosition()), r.hashCode());
+    }
+
+    @Test
+    void setPositionTest() {
+        r.setPosition(2);
+        assertEquals(2, r.getPosition());
+    }
+
+    @Test
+    void setCarSpeedTest() {
+        r.setCarSpeed(5);
+        assertEquals(5, r.getCarSpeed());
+    }
+
+    @Test
+    void toJsonTest() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("direction", r.getDirection());
+        jsonObject.put("carSpeed", r.getCarSpeed());
+        jsonObject.put("y", r.getPosition());
+        assertEquals(jsonObject.toString(), r.toJson().toString());
     }
 }

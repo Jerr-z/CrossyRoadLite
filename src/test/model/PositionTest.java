@@ -1,6 +1,8 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
 import java.util.Objects;
@@ -67,5 +69,13 @@ public class PositionTest {
         assertEquals(Objects.hash(5,5),position.hashCode());
         position = new Position(7,8);
         assertEquals(Objects.hash(7,8),position.hashCode());
+    }
+
+    @Test
+    void toJsonTest() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("x", position.getX());
+        jsonObject.put("y", position.getY());
+        assertEquals(jsonObject.toString(), position.toJson().toString());
     }
 }

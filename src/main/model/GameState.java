@@ -404,7 +404,7 @@ public class GameState {
         return jsonObject;
     }
 
-    private JSONArray listOfTreesToJson() {
+    public JSONArray listOfTreesToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Position p: listOfTrees) {
             jsonArray.put(p.toJson());
@@ -412,7 +412,7 @@ public class GameState {
         return jsonArray;
     }
 
-    private JSONArray listOfGrassToJson() {
+    public JSONArray listOfGrassToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Position p: listOfGrass) {
             jsonArray.put(p.toJson());
@@ -420,7 +420,7 @@ public class GameState {
         return jsonArray;
     }
 
-    private JSONArray listOfCarsToJson() {
+    public JSONArray listOfCarsToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Car c: listOfCars) {
             jsonArray.put(c.toJson());
@@ -429,7 +429,7 @@ public class GameState {
         return jsonArray;
     }
 
-    private JSONArray listOfRoadsToJson() {
+    public JSONArray listOfRoadsToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Road r: listOfRoads) {
             jsonArray.put(r.toJson());

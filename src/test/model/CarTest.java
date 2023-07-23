@@ -1,6 +1,8 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
 public class CarTest {
@@ -105,6 +107,14 @@ public class CarTest {
         // neutral
         car.updatePosition(0,0);
         assertEquals(new Position(1,1), car.getPosition());
+    }
+
+    @Test
+    void toJsonTest() {
+        JSONObject jsonObject = car.getPosition().toJson();
+        jsonObject.put("speed", car.getSpeed());
+        assertEquals(jsonObject.toString(), car.toJson().toString());
+
     }
 
 

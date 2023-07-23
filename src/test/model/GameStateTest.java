@@ -5,6 +5,7 @@ import static model.GameState.CHICKEN_SPD;
 import static org.junit.jupiter.api.Assertions.*;
 import static ui.Terminal.CANVAS_SIZE;
 
+import org.json.JSONArray;
 import org.junit.jupiter.api.*;
 
 import java.util.HashSet;
@@ -698,4 +699,38 @@ public class GameStateTest {
         game.updateScore(-1);
         assertEquals(prevScore, game.getScore());
     }
+
+    // set chicken
+    @Test
+    void setChickenTest() {
+        Chicken c = new Chicken(new Position(1,2));
+        game.setChicken(c);
+        assertEquals(c, game.getChicken());
+    }
+
+    // clear
+    @Test
+    void clearTest() {
+        game.clear();
+        assertEquals(0, game.getListOfCars().size());
+        assertEquals(0, game.getListOfRoads().size());
+        assertEquals(0, game.getListOfTrees().size());
+        assertEquals(0, game.getListOfGrass().size());
+    }
+
+    @Test
+    void listOfTreesToJsonEmptyListTest() {
+        game.clear();
+        assertEquals(new JSONArray().toString(), game.listOfTreesToJson().toString());
+    }
+
+    @Test
+    void listOfTreesToJsonNonEmptyListTest() {
+        game.clear();
+        game.getListOfTrees().add(new Position(1,1));
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(new Position(1,1).toJson());
+        assertEquals(jsonArray.toString(), game.listOfTreesToJson().toString());
+    }
+
 }
