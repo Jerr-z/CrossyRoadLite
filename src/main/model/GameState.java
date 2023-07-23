@@ -1,5 +1,8 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -243,13 +246,13 @@ public class GameState {
     // MODIFIES: this
     // EFFECTS: moves the cars in their direction with their speed
     public void updateCars() {
-        removeCarsOutOfBounds();
         // iterate through listOfCars
         Iterator<Car> carIterator = listOfCars.iterator();
         while (carIterator.hasNext()) {
             Car car = carIterator.next();
             car.move();
         }
+        removeCarsOutOfBounds();
     }
 
     // MODIFIES: this
@@ -259,7 +262,7 @@ public class GameState {
         while (carIterator.hasNext()) {
             Car car = carIterator.next();
             Position carPos = car.getPosition();
-            if (!carPos.withinBoundary(canvasSize, canvasSize)) {
+            if (!carPos.withinBoundary(canvasSize - 1, canvasSize - 1)) {
                 carIterator.remove();
             }
         }
@@ -363,7 +366,74 @@ public class GameState {
         this.input = input;
     }
 
+    public void setChicken(Chicken c) {
+        chicken = c;
+    }
+
     public HashSet<Position> getNextStep() {
         return this.nextStep;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: wipe the map clean
+    public void clear() {
+        // TODO
+        listOfTrees.clear();
+        listOfRoads.clear();
+        listOfGrass.clear();
+        listOfCars.clear();
+        chicken = null;
+        score = 0;
+    }
+
+    public JSONObject toJson() {
+
+        JSONObject jsonObject = new JSONObject();
+        // list of trees
+        jsonObject.put("listOfTrees", listOfTreesToJson());
+        // list of grass
+        jsonObject.put("listOfGrass", listOfGrassToJson());
+        // list of cars
+        jsonObject.put("listOfCars", listOfCarsToJson());
+        // list of roads
+        jsonObject.put("listOfRoads", listOfRoadsToJson());
+        // chicken
+        jsonObject.put("chicken", chicken.toJson());
+        // score
+        jsonObject.put("score", score);
+        return jsonObject;
+    }
+
+    private JSONArray listOfTreesToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Position p: listOfTrees) {
+            jsonArray.put(p.toJson());
+        }
+        return jsonArray;
+    }
+
+    private JSONArray listOfGrassToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Position p: listOfGrass) {
+            jsonArray.put(p.toJson());
+        }
+        return jsonArray;
+    }
+
+    private JSONArray listOfCarsToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Car c: listOfCars) {
+            jsonArray.put(c.toJson());
+        }
+
+        return jsonArray;
+    }
+
+    private JSONArray listOfRoadsToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Road r: listOfRoads) {
+            jsonArray.put(r.toJson());
+        }
+        return jsonArray;
     }
 }

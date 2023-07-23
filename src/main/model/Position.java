@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 import java.util.*;
 
 // represents a position in 2d space
@@ -38,9 +40,6 @@ public class Position {
         return xpos <= x && ypos <= y;
     }
 
-    // HUGE THANK YOU TO MAZENK FOR THIS PIECE OF CODE
-    // https://github.students.cs.ubc.ca/CPSC210/Snake
-    // Console-Lanterna/blob/main/src/main/java/com/mazenk/snake/model/Position.java
 
     // EFFECTS: overrides the equals method for object comparison
     @Override
@@ -55,13 +54,18 @@ public class Position {
         return xpos == other.xpos && ypos == other.ypos;
     }
 
-    // HUGE THANK YOU TO MAZENK FOR THIS PIECE OF CODE
-    // https://github.students.cs.ubc.ca/CPSC210/Sn
-    // akeConsole-Lanterna/blob/main/src/main/java/com/mazenk/snake/model/Position.java
 
     // EFFECTS: overrides the hashCode method for object comparison
     @Override
     public int hashCode() {
         return Objects.hash(xpos, ypos);
+    }
+
+    // EFFECTS: parses current object to json format
+    public JSONObject toJson() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("x", xpos);
+        jsonObject.put("y", ypos);
+        return  jsonObject;
     }
 }

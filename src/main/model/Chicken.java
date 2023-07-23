@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -22,5 +24,10 @@ public class Chicken {
 
     public Position getPosition() {
         return position;
+    }
+
+    // EFFECTS: converts current object to json format
+    public JSONObject toJson() {
+        return position.toJson();
     }
 }

@@ -2,6 +2,11 @@
 
 ## Can the Chicken Cross the Road?
 
+### Acknowledgement
+This project has based its program structure on Mazen Kotb's Snake Console, available
+at https://github.com/mkotb/SnakeConsole. <br>
+The save and read functions are based on the JsonSerializationDemo provided by my professor
+Paul Carter.
 ###  User story
 <br>
 Imagine yourself sitting in your summer English class on a tuesday night. 
@@ -18,13 +23,16 @@ the joke "Can the chicken cross the road?".
 - As a user, I want to experience the thrill by avoiding multiple cars on the road
 - As a user, I want to see a randomly generated map, so it's a new experience everytime.
 - As a user, I want an endless gaming experience until I die in game.
+- As a user, when I want to quit from the current game session, I want to have the option 
+to save my current game progress to file
+- As a user, when I start the game, I want to be given the option to load my previous game
+progress from file
 
 ### What will the Application do?
 <br>
 A thrilling experience of simple yet challenging gameplay will be provided to
 the users through dodging cars, avoiding obstacles and most importantly, crossing
-the **ROAD**! High scores of individual users will be displayed in game for you to beat
-your friends' records or yourself! The game will be utilizing a very simple control
+the **ROAD**! Scores of users will be displayed in game for you. The game will be utilizing a very simple control
 scheme of 4 direction inputs which allows you to control the avatar freely in a 2d
 space.
 

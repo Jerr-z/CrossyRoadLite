@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 // Represents the car that can crush the chicken
 public class Car {
     private int speed;
@@ -34,4 +36,12 @@ public class Car {
         return this.speed;
     }
 
+    // EFFECTS: converts current object to json format
+    public JSONObject toJson() {
+
+        JSONObject jsonObject = position.toJson();
+        jsonObject.put("speed", speed);
+
+        return jsonObject;
+    }
 }

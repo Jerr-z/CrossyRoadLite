@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -86,5 +88,23 @@ public class Road {
     //REQUIRES : direction = 1 or -1
     public void setDirection(int dir) {
         this.direction = dir;
+    }
+
+    public void setPosition(int y) {
+        ypos = y;
+    }
+
+    public void setCarSpeed(int v) {
+        this.carSpeed = v;
+    }
+
+    // EFFECTS: parses current object to json format
+    public JSONObject toJson() {
+        // TODO
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("direction", direction);
+        jsonObject.put("carSpeed", carSpeed);
+        jsonObject.put("y", ypos);
+        return jsonObject;
     }
 }
