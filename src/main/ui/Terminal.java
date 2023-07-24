@@ -31,7 +31,7 @@ public class Terminal {
     private GameState game;
     private Screen screen;
     private WindowBasedTextGUI endGui;
-    private static final String JSON_STORE = "./data/gamestate.json";
+    public static final String JSON_STORE = "./data/gamestate.json";
     private Scanner input;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;

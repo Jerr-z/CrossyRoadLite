@@ -1,0 +1,11 @@
+{
+  "listOfTrees": [],
+  "listOfGrass": [],
+  "listOfCars": [],
+  "listOfRoads": [],
+  "chicken": {
+    "x":  1,
+    "y": 1
+  },
+  "score": 0
+}

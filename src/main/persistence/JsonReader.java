@@ -25,6 +25,11 @@ public class JsonReader {
         this.source = source;
     }
 
+    // EFFECTS: gets source file string
+    public String getSource() {
+        return source;
+    }
+
     // EFFECTS: reads workroom from file and returns it;
     // throws IOException if an error occurs reading data from file
     public GameState read() throws IOException {
@@ -34,7 +39,7 @@ public class JsonReader {
     }
 
     // EFFECTS: reads source file as string and returns it
-    private String readFile(String source) throws IOException {
+    public String readFile(String source) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
 
         try (Stream<String> stream = Files.lines(Paths.get(source), StandardCharsets.UTF_8)) {
@@ -45,7 +50,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses GameState from JSON object and returns it
-    private GameState parseGameState(JSONObject jsonObject) {
+    public GameState parseGameState(JSONObject jsonObject) {
         GameState game = new GameState(CANVAS_SIZE);
         game.clear();
         // add everything to game
@@ -67,7 +72,7 @@ public class JsonReader {
 
     // MODIFIES: game
     // EFFECTS: parses chicken from JSON object and adds it to GameState
-    private void addChicken(GameState game, JSONObject jsonObject) {
+    public void addChicken(GameState game, JSONObject jsonObject) {
         JSONObject chickenInfo = jsonObject.getJSONObject("chicken");
         Position chickenPos = new Position(chickenInfo.getInt("x"), chickenInfo.getInt("y"));
         Chicken chicken = new Chicken(chickenPos);
@@ -76,7 +81,7 @@ public class JsonReader {
 
     // MODIFIES: game
     // EFFECTS: parses position from JSON object and adds it to hashset
-    private void addPositionToHashSet(JSONObject jsonObject, HashSet<Position> list) {
+    public void addPositionToHashSet(JSONObject jsonObject, HashSet<Position> list) {
         // this is for grass and trees
         int x = jsonObject.getInt("x");
         int y = jsonObject.getInt("y");
@@ -88,7 +93,7 @@ public class JsonReader {
 
     // MODIFIES: game
     // EFFECTS: parses list of position from JSON object and adds it to a list
-    private void addListOfPosition(JSONObject jsonObject, String key, HashSet<Position> list) {
+    public void addListOfPosition(JSONObject jsonObject, String key, HashSet<Position> list) {
         JSONArray jsonArray = jsonObject.getJSONArray(key);
         for (Object json: jsonArray) {
             JSONObject nextPos = (JSONObject) json;
@@ -99,7 +104,7 @@ public class JsonReader {
 
     // MODIFIES: game
     // EFFECTS: parses listOfCars from JSON object and adds it to GameState
-    private void addListOfCars(GameState game, JSONObject jsonObject) {
+    public void addListOfCars(GameState game, JSONObject jsonObject) {
         JSONArray jsonArray = jsonObject.getJSONArray("listOfCars");
         for (Object json: jsonArray) {
             JSONObject nextCar = (JSONObject) json;
@@ -109,7 +114,7 @@ public class JsonReader {
 
     // MODIFIES: game
     // EFFECTS: parses Car from JSON object and adds it to GameState
-    private void addCars(GameState game, JSONObject jsonObject) {
+    public void addCars(GameState game, JSONObject jsonObject) {
         int speed = jsonObject.getInt("speed");
         int dir = speed / abs(speed);
         int x = jsonObject.getInt("x");
@@ -121,7 +126,7 @@ public class JsonReader {
 
     // MODIFIES: game
     // EFFECTS: parses listOfRoads from JSON object and adds it to GameState
-    private void addListOfRoads(GameState game, JSONObject jsonObject) {
+    public void addListOfRoads(GameState game, JSONObject jsonObject) {
         JSONArray jsonArray = jsonObject.getJSONArray("listOfRoads");
         for (Object json: jsonArray) {
             JSONObject nextRoad = (JSONObject) json;
@@ -131,7 +136,7 @@ public class JsonReader {
 
     // MODIFIES: game
     // EFFECTS: parses listOfTrees from JSON object and adds it to GameState
-    private void addRoad(GameState game, JSONObject jsonObject) {
+    public void addRoad(GameState game, JSONObject jsonObject) {
         int direction = jsonObject.getInt("direction");
         int carSpeed = jsonObject.getInt("carSpeed");
         int y = jsonObject.getInt("y");
@@ -142,8 +147,10 @@ public class JsonReader {
         lor.add(r);
     }
 
-    private void addScore(GameState game, JSONObject jsonObject) {
+    public void addScore(GameState game, JSONObject jsonObject) {
         int score = jsonObject.getInt("score");
         game.updateScore(score);
     }
+
+
 }

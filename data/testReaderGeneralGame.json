@@ -1,0 +1,25 @@
+{
+  "listOfTrees": [{
+    "x": 6,
+    "y": 9
+  }],
+  "listOfGrass": [{
+    "x": 9,
+    "y": 6
+  }],
+  "listOfCars": [{
+    "x": 3,
+    "y": 6,
+    "speed": 1
+  }],
+  "listOfRoads": [{
+    "y": 3,
+    "carSpeed": 1,
+    "direction": -1
+  }],
+  "chicken": {
+    "x": 10,
+    "y": 18
+  },
+  "score": 2
+}

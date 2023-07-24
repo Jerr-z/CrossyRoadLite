@@ -63,4 +63,9 @@ class ChickenTest {
         chicken.updatePos(0,0);
         assertEquals(new Position(1,1), chicken.getPosition());
     }
+
+    @Test
+    void toJsonTest() {
+        assertEquals(chickenPos.toJson().toString(), chicken.toJson().toString());
+    }
 }

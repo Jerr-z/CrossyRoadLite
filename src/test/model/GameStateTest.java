@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static ui.Terminal.CANVAS_SIZE;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
 import java.util.HashSet;
@@ -731,6 +732,72 @@ public class GameStateTest {
         JSONArray jsonArray = new JSONArray();
         jsonArray.put(new Position(1,1).toJson());
         assertEquals(jsonArray.toString(), game.listOfTreesToJson().toString());
+    }
+
+    @Test
+    void listOfGrassToJsonEmptyListTest() {
+        game.clear();
+        assertEquals(new JSONArray().toString(), game.listOfGrassToJson().toString());
+    }
+
+    @Test
+    void listOfGrassToJsonNonEmptyListTest() {
+        game.clear();
+        game.getListOfGrass().add(new Position(1,1));
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(new Position(1,1).toJson());
+        assertEquals(jsonArray.toString(), game.listOfGrassToJson().toString());
+    }
+
+    @Test
+    void listOfCarsToJsonEmptyListTest() {
+        game.clear();
+        assertEquals(new JSONArray().toString(), game.listOfCarsToJson().toString());
+    }
+
+    @Test
+    void listOfCarsToJsonNonEmptyListTest() {
+        game.clear();
+        Car testCar = new Car(1, new Position(1,1),1);
+        game.getListOfCars().add(testCar);
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(testCar.toJson());
+        assertEquals(jsonArray.toString(), game.listOfCarsToJson().toString());
+    }
+
+    @Test
+    void listOfRoadsToJsonEmptyListTest() {
+        game.clear();
+        assertEquals(new JSONArray().toString(), game.listOfRoadsToJson().toString());
+    }
+
+    @Test
+    void listOfRoadsToJsonNonEmptyListTest() {
+        game.clear();
+        Road testRoad = new Road(1);
+        game.getListOfRoads().add(testRoad);
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(testRoad.toJson());
+        assertEquals(jsonArray.toString(), game.listOfRoadsToJson().toString());
+    }
+
+    @Test
+    void toJsonTest() {
+        JSONObject jsonObject = new JSONObject();
+        // list of trees
+        jsonObject.put("listOfTrees", game.listOfTreesToJson());
+        // list of grass
+        jsonObject.put("listOfGrass", game.listOfGrassToJson());
+        // list of cars
+        jsonObject.put("listOfCars", game.listOfCarsToJson());
+        // list of roads
+        jsonObject.put("listOfRoads", game.listOfRoadsToJson());
+        // chicken
+        jsonObject.put("chicken", game.getChicken().toJson());
+        // score
+        jsonObject.put("score", game.getScore());
+
+        assertEquals(jsonObject.toString(), game.toJson().toString());
     }
 
 }
