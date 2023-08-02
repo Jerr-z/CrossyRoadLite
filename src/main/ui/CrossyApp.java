@@ -14,8 +14,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import static ui.Terminal.CANVAS_SIZE;
-
 public class CrossyApp extends JFrame {
     public static final int SCALE = 30;
     public static final int CANVAS_SIZE = 20;
@@ -28,7 +26,8 @@ public class CrossyApp extends JFrame {
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
     private String input;
-    private boolean resume;
+    private boolean isPaused;
+    private boolean gameOverShown;
 
     // EFFECTS: sets up a display window for the game
     public CrossyApp() {
@@ -42,7 +41,7 @@ public class CrossyApp extends JFrame {
         game = new GameState(CANVAS_SIZE);
         promptLoadGame();
         renderer = new CrossyRenderer(game);
-        resume = true;
+        isPaused = false;
         addKeyListener(new KeyHandler());
         centreOnScreen();
         addTimer();
@@ -116,12 +115,11 @@ public class CrossyApp extends JFrame {
                     break;
                 case KeyEvent.VK_Q:
                     input = "quit";
-                    resume = false;
+                    isPaused = true;
                     break;
-                default:
-                    input = "none";
             }
         }
+
     }
 
     // MODIFIES: this
@@ -138,18 +136,20 @@ public class CrossyApp extends JFrame {
         t.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if (game.isChickenDead()) {
+                if (game.isChickenDead() && !gameOverShown) {
                     t.stop();
                     showGameOverWindow();
-                } else if (!resume) {
+                    gameOverShown = true;
+                } else if (gameOverShown) {
+                    t.stop();
+                } else if (isPaused) {
                     t.stop();
                     showPauseWindow();
                 } else {
+                    t.start();
                     game.tick(input);
+                    input = "none";
                     repaint();
-                }
-                if (resume && !t.isRunning()) {
-                    t.restart();
                 }
             }
         });
@@ -188,7 +188,8 @@ public class CrossyApp extends JFrame {
         resumeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                resume = true;
+                isPaused = false;
+                addTimer();
                 pauseFrame.dispose();
             }
         });
