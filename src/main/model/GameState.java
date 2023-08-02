@@ -43,7 +43,7 @@ public class GameState {
 
     // MODIFIES: this
     // EFFECTS: updates various states of the game, main tick function
-    // REQUIRES: input must be one of "up", "down", "left", "right" or "none"
+    // REQUIRES: input must be one of "up", "down", "left", "right" "none" or "quit"
     public void tick(String input) {
         this.input = input; // updates user input
         updateGameCamera(); // shifts everything from cam perspective
@@ -386,6 +386,7 @@ public class GameState {
         score = 0;
     }
 
+    // EFFECTS: converts to json
     public JSONObject toJson() {
 
         JSONObject jsonObject = new JSONObject();
@@ -404,6 +405,7 @@ public class GameState {
         return jsonObject;
     }
 
+    // EFFECTS: converts list of trees to json
     public JSONArray listOfTreesToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Position p: listOfTrees) {
@@ -412,6 +414,7 @@ public class GameState {
         return jsonArray;
     }
 
+    // EFFECTS: converts grass to json
     public JSONArray listOfGrassToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Position p: listOfGrass) {
@@ -420,6 +423,7 @@ public class GameState {
         return jsonArray;
     }
 
+    // EFFECTS: converts cars to json
     public JSONArray listOfCarsToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Car c: listOfCars) {
@@ -429,6 +433,7 @@ public class GameState {
         return jsonArray;
     }
 
+    // EFFECTS: converts list of roads to json
     public JSONArray listOfRoadsToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Road r: listOfRoads) {
