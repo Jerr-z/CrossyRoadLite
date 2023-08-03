@@ -147,6 +147,7 @@ public class JsonReader {
         lor.add(r);
     }
 
+    // EFFECTS: adds score into the game state
     public void addScore(GameState game, JSONObject jsonObject) {
         int score = jsonObject.getInt("score");
         game.updateScore(score);

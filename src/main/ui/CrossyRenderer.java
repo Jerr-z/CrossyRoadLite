@@ -3,24 +3,31 @@ package ui;
 import model.*;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.HashSet;
+import javax.imageio.ImageIO;
 
+import static ui.CrossyApp.CHICKEN_IMG_PATH;
 import static ui.CrossyApp.SCALE;
 import static ui.Terminal.CANVAS_SIZE;
 
 // Inspriation taken from lab 6 swing components
-
+// Represents the renderer for crossy GUI
 public class CrossyRenderer {
     private static final Color GRASS_COLOUR = new Color(0,255,0);
     private static final Color TREE_COLOUR = new Color(1,90,32);
-    private static final Color ROAD_COLOUR = new Color (125,125,125);
+    private static final Color ROAD_COLOUR = new Color(125,125,125);
     private static final Color CHICKEN_COLOUR = new Color(255,255,255);
     private static final Color CAR_COLOR = new Color(255,0,0);
     private GameState game;
+    private CrossyApp crossyApp;
+    private BufferedImage image;
 
     // EFFECTS: constructs a renderer with the current game session
-    public CrossyRenderer(GameState game) {
+    public CrossyRenderer(GameState game, CrossyApp app) {
         this.game = game;
+        this.crossyApp = app;
     }
 
     // MODIFIES: graphics
@@ -81,14 +88,29 @@ public class CrossyRenderer {
     void drawChicken(Graphics graphics) {
         Chicken chicken = game.getChicken();
         graphics.setColor(CHICKEN_COLOUR);
-        graphics.fillOval(getScreenXCoord(chicken.getPosition()), getScreenYCoord(chicken.getPosition()), SCALE, SCALE);
+        if (image == null) {
+            try {
+                image = ImageIO.read(new File(CHICKEN_IMG_PATH));
+            } catch (Exception e) {
+                System.out.println("chicken not found");
+            }
+        }
+        if (image != null) {
+            graphics.drawImage(image, getScreenXCoord(chicken.getPosition()),
+                    getScreenYCoord(chicken.getPosition()), SCALE, SCALE, crossyApp);
+        } else {
+            graphics.fillOval(getScreenXCoord(chicken.getPosition()),
+                    getScreenYCoord(chicken.getPosition()), SCALE, SCALE);
+        }
     }
 
     // MODIFIES: graphics
     // EFFECTS: displays score onto graphics
     void drawScore(Graphics graphics) {
+        Font font = new Font("Arial", Font.BOLD, 20);
+        graphics.setFont(font);
         graphics.setColor(Color.white);
-        graphics.drawString("SCORE: " + game.getScore(), 0,0);
+        graphics.drawString("SCORE: " + game.getScore(), 20,20);
     }
 
     // EFFECTS: translates game board position to actual screen coordinates

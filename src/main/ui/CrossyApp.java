@@ -14,6 +14,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+// Reference from Lab6 SnakeApp
+// https://github.students.cs.ubc.ca/CPSC210-2023S-T2/lab6_j4o9k
+
+// A game app for crossy
 public class CrossyApp extends JFrame {
     public static final int SCALE = 30;
     public static final int CANVAS_SIZE = 20;
@@ -23,6 +27,7 @@ public class CrossyApp extends JFrame {
     private GameState game;
     private CrossyRenderer renderer;
     public static final String JSON_STORE = "./data/gamestate.json";
+    public static final String CHICKEN_IMG_PATH = "./data/chicken.png";
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
     private String input;
@@ -40,7 +45,7 @@ public class CrossyApp extends JFrame {
         jsonReader = new JsonReader(JSON_STORE);
         game = new GameState(CANVAS_SIZE);
         promptLoadGame();
-        renderer = new CrossyRenderer(game);
+        renderer = new CrossyRenderer(game, this);
         isPaused = false;
         addKeyListener(new KeyHandler());
         centreOnScreen();
@@ -82,6 +87,8 @@ public class CrossyApp extends JFrame {
         }
     }
 
+    // EFFECTS: loads save file to game
+    // MODIFIES: this
     private void loadGameState() {
         try {
             game.clear(); // probably not needed but i would rather comment here than delete it :)
@@ -156,6 +163,8 @@ public class CrossyApp extends JFrame {
         t.start();
     }
 
+    // EFFECTS: shows a game over window
+    // MODIFIES: this
     private void showGameOverWindow() {
         JFrame gameOverFrame = new JFrame("Game Over");
         gameOverFrame.setSize(CANVAS_SIZE * SCALE / 2, CANVAS_SIZE * SCALE / 2);
@@ -175,43 +184,67 @@ public class CrossyApp extends JFrame {
         gameOverFrame.setVisible(true);
     }
 
-    // EFFECT: shows pause window
+    // EFFECTS: displays pause window
     private void showPauseWindow() {
+        JFrame pauseFrame = createPauseFrame();
+        JLabel pauseLabel = createPauseLabel();
+        JButton resumeButton = createResumeButton(pauseFrame);
+        JButton saveButton = createSaveButton();
+        JButton quitButton = createQuitButton();
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
+        buttonPanel.add(resumeButton);
+        buttonPanel.add(saveButton);
+        buttonPanel.add(quitButton);
+
+        pauseFrame.add(pauseLabel, BorderLayout.CENTER);
+        pauseFrame.add(buttonPanel, BorderLayout.SOUTH);
+        pauseFrame.setVisible(true);
+    }
+
+    // EFFECTS: create a pause JFrame
+    private JFrame createPauseFrame() {
         JFrame pauseFrame = new JFrame("Paused");
         pauseFrame.setSize(CANVAS_SIZE * SCALE / 2, CANVAS_SIZE * SCALE / 2);
         pauseFrame.setLocationRelativeTo(this);
         pauseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JLabel pauseLabel = new JLabel("Game Paused, would you like to save before quitting?");
+        return pauseFrame;
+    }
+
+    // EFFECTS: create a string to display on the window
+    private JLabel createPauseLabel() {
+        JLabel pauseLabel = new JLabel("Game Paused");
+        pauseLabel.setMaximumSize(new Dimension(CANVAS_SIZE * SCALE / 2, CANVAS_SIZE * SCALE / 2));
+        return pauseLabel;
+    }
+
+    // EFFECTS: creates a resume button
+    private JButton createResumeButton(JFrame pauseFrame) {
         JButton resumeButton = new JButton("Resume");
+        resumeButton.addActionListener(e -> {
+            isPaused = false;
+            addTimer();
+            pauseFrame.dispose();
+        });
+        return resumeButton;
+    }
+
+    // EFFECTS: creates a button to save game
+    private JButton createSaveButton() {
         JButton saveButton = new JButton("Save");
+        saveButton.addActionListener(e -> {
+            saveGameState();
+            System.exit(0);
+        });
+        return saveButton;
+    }
+
+    // EFFECTS: creates a button that quits game
+    private JButton createQuitButton() {
         JButton quitButton = new JButton("Quit");
-        resumeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                isPaused = false;
-                addTimer();
-                pauseFrame.dispose();
-            }
-        });
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                saveGameState();
-                System.exit(0);
-            }
-        });
-        quitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-        pauseFrame.getContentPane().setLayout(new FlowLayout());
-        pauseFrame.getContentPane().add(pauseLabel, BorderLayout.CENTER);
-        pauseFrame.getContentPane().add(quitButton, BorderLayout.SOUTH);
-        pauseFrame.getContentPane().add(saveButton, BorderLayout.SOUTH);
-        pauseFrame.getContentPane().add(resumeButton, BorderLayout.SOUTH);
-        pauseFrame.setVisible(true);
+        quitButton.addActionListener(e -> System.exit(0));
+        return quitButton;
     }
 
 

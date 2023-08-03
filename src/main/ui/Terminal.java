@@ -73,6 +73,8 @@ public class Terminal {
         }
     }
 
+    // EFFECTS: loads game state from json file
+    // MODIFIES: this
     private void loadGameState() {
         try {
             game.clear(); // probably not needed but i would rather comment here than delete it :)
