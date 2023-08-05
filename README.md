@@ -53,7 +53,9 @@ would serve as a stepping stone for future projects that could be way more robus
 # Instructions for Grader
 
 - You can generate the first required action related to adding Xs to a Y by starting the application, the game will automatically generate game objects and place them onto the map.
-- You can generate the second required action related to adding Xs to a Y by progressing in game. The game objects will move out of view and be removed from the game as you move forward, and new game objects will be generated and added onto the map.
+- You can generate the second required action related to adding Xs to a Y by progressing in game. The game objects will move out of view and be removed from the game
+as you move forward, and new game objects will be generated and added onto the map.
+- You can generate the third required action related to adding Xs to a Y by pressing Q, this will pause the game and stop the adding process.
 - You can locate my visual component by looking at the screen, it's right in the middle of your screen!
 - You can save the state of my application by pressing Q to pause the game and select corresponding actions
 - You can reload the state of my application by starting the application. The program will check automatically if a save is present in the data folder. 
