@@ -26,7 +26,7 @@ public class GameState {
     private int canvasSize;
     private String input;
     private HashSet<Position> nextStep;
-
+    private static EventLog log = EventLog.getInstance();
 
     // EFFECTS: creates a GameState object with score of 0, canvasSize and initial level
     // REQUIRES: canvasSize > 3
@@ -70,6 +70,7 @@ public class GameState {
         // for the last 3 rows create just grass
         for (int i = canvasSize - 3; i < canvasSize; i++) {
             generateGrass(canvasSize, i, false);
+            log.logEvent(new Event("Grass generated at (" + i + ", " + canvasSize + ")"));
         }
     }
 
@@ -80,6 +81,7 @@ public class GameState {
         int midpoint = canvasSize / 2;
         //System.out.println(midpoint);
         chicken = new Chicken(new Position(midpoint, canvasSize - 4));
+        log.logEvent(new Event("Chicken placed at (" + midpoint + ", " + (canvasSize - 4) + ")"));
     }
 
     // MODIFIES: this
@@ -91,9 +93,11 @@ public class GameState {
         if (choice == 0) {
             // grass
             generateGrass(canvasSize, y, true);
+            log.logEvent(new Event("A strip of grass at y coord " + y + " is added to the game"));
         } else {
             // road
             generateRoad(y);
+            log.logEvent(new Event("A strip of road at level " + y + " is added to the game"));
         }
     }
 
@@ -127,6 +131,7 @@ public class GameState {
     // REQUIRES: 0 <= both x and y < canvasSize
     public void generateTree(int x, int y) {
         listOfTrees.add(new Position(x,y));
+        log.logEvent(new Event("Tree generated at (" + x + ", " + y + ")"));
     }
 
     // MODIFIES: this
@@ -150,10 +155,12 @@ public class GameState {
 
         // if on the bottom of screen
         if (chickenY >= canvasSize - 1) {
+            log.logEvent(new Event("Chicken is dead!"));
             return true;
         }
         for (Car c: listOfCars) {
             if (chicken.getPosition().equals(c.getPosition())) {
+                log.logEvent(new Event("Chicken is dead!"));
                 return true;
             }
         }
@@ -264,6 +271,8 @@ public class GameState {
             Position carPos = car.getPosition();
             if (!carPos.withinBoundary(canvasSize - 1, canvasSize - 1)) {
                 carIterator.remove();
+                log.logEvent(new Event("Car removed at (" + car.getPosition().getX() + ", "
+                        + car.getPosition().getY() + ")"));
             }
         }
     }
@@ -274,6 +283,7 @@ public class GameState {
     // MODIFIES: this
     public void removeBottomGrass() {
         listOfGrass.removeIf(grass -> grass.getY() == canvasSize - 1);
+        log.logEvent(new Event("The strip of grass at the bottom of the screen is removed"));
     }
 
     // EFFECTS: removes the most bottom layer of trees if its about to be phased out
@@ -281,6 +291,7 @@ public class GameState {
     // MODIFIES: this
     public void removeBottomTrees() {
         listOfTrees.removeIf(tree -> tree.getY() == canvasSize - 1);
+        log.logEvent(new Event("The trees at the bottom of the screen is removed"));
     }
 
     // EFFECTS: removes the most bottom layer of cars if its about to be phased out
@@ -288,12 +299,15 @@ public class GameState {
     // MODIFIES: this
     public void removeBottomCars() {
         listOfCars.removeIf(car -> car.getPosition().getY() == canvasSize - 1);
+        log.logEvent(new Event("Cars at bottom level are removed"));
+
     }
 
     // EFFECTS: removes bottom layer of roads if its about to be phased out
     // MODIFIES: this
     public void removeBottomRoad() {
         listOfRoads.removeIf(road -> road.getPosition() == canvasSize - 1);
+        log.logEvent(new Event("The strip of road at the bottom of the screen removed"));
     }
 
 

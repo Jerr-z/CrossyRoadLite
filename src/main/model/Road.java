@@ -47,6 +47,7 @@ public class Road {
             spawnPoint = new Position(0, ypos);
         }
         Car car = new Car(carSpeed, spawnPoint, direction);
+        EventLog.getInstance().logEvent(new Event("Car generated at (0, " + ypos + ")"));
         return car;
     }
 

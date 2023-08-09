@@ -1,5 +1,7 @@
 package ui;
 
+import model.Event;
+import model.EventLog;
 import model.GameState;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -175,6 +177,7 @@ public class CrossyApp extends JFrame {
         quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                printEvents();
                 System.exit(0);
             }
         });
@@ -235,15 +238,25 @@ public class CrossyApp extends JFrame {
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(e -> {
             saveGameState();
+            printEvents();
             System.exit(0);
         });
         return saveButton;
     }
 
+    private void printEvents() {
+        for (Event event: EventLog.getInstance()) {
+            System.out.println(event.toString());
+        }
+    }
+
     // EFFECTS: creates a button that quits game
     private JButton createQuitButton() {
         JButton quitButton = new JButton("Quit");
-        quitButton.addActionListener(e -> System.exit(0));
+        quitButton.addActionListener(e -> {
+            printEvents();
+            System.exit(0);
+        });
         return quitButton;
     }
 
