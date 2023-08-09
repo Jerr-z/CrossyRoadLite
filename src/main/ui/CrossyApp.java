@@ -27,7 +27,7 @@ public class CrossyApp extends JFrame {
     private GameState game;
     private CrossyRenderer renderer;
     public static final String JSON_STORE = "./data/gamestate.json";
-    public static final String CHICKEN_IMG_PATH = "./data/chicken.png";
+    public static final String CHICKEN_IMG_PATH = "./data/gregor.png";
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
     private String input;
