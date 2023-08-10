@@ -61,3 +61,10 @@ as you move forward, and new game objects will be generated and added onto the m
 - You can save the state of my application by pressing Q to pause the game and select corresponding actions
 - You can reload the state of my application by starting the application. The program will check automatically if a save is present in the data folder. 
 If the folder exists then the game will ask if you want to load the save state or not.
+
+# Phase 4 Task 3
+- One thing I have noticed in the project is the similarity of the different game objects I have
+all of them have a position, but has other different behaviors. So with the refactoring, I would probaby
+have all the game objects extend off an abstract gameObject class, and then specify their behaviors there.
+- The observer pattern can probably be implemented as well as I can notify my game objects to update as the game
+ticks. So GameState can be the subject and all my game objects can be the observer.
