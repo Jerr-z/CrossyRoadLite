@@ -12,6 +12,7 @@ the **ROAD**! Scores of users will be displayed in game for you. The game will b
 scheme of 4 direction inputs which allows you to control the avatar freely in a 2d
 space.
 
+![image](https://github.com/Jerr-z/CrossyRoadLite/assets/74624174/67127789-6ccf-446e-ac8e-4fc81a0293d8)
 
 <br>
 This is a game that everyone can play! If you want to save yourself from boredom, 
